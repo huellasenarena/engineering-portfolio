@@ -23,7 +23,7 @@ export const ui = {
 
     'about.title': 'Sobre mí',
     'about.body':
-      'Me gradué en Matemáticas e informática en USC y me especialicé en sistemas de IA y desarrollo full-stack. Construyo productos de principio a fin: modelo, backend, y frontend. Trabajo en inglés, español, francés (DALF C1) y griego — ventaja real en equipos bilingües y de nearshoring.',
+      'Me gradué en Matemáticas e informática en USC y me especialicé en sistemas de IA y desarrollo full-stack. Construyo productos de principio a fin: modelo, backend, y frontend. Trabajo en inglés, español, francés (DALF C1) y griego.',
 
     'contact.title': 'Contacto',
     'contact.github': 'GitHub',
@@ -53,7 +53,7 @@ export const ui = {
 
     'about.title': 'About',
     'about.body':
-      'I studied mathematics and computer science at USC and specialized in AI systems and full-stack development. I build products end to end — model, backend, and frontend. I work in English, Spanish, French (DALF C1), and Greek — a genuine advantage for bilingual and nearshore teams.',
+      'I studied mathematics and computer science at USC and specialized in AI systems and full-stack development. I build products end to end — model, backend, and frontend. I work in English, Spanish, French (DALF C1), and Greek.',
 
     'contact.title': 'Contact',
     'contact.github': 'GitHub',
