@@ -27,5 +27,23 @@ const alternateUrl = getAlternateUrl(Astro.url, alternateLang);
   </head>
   <body>
     <slot />
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('[data-reveal]').forEach((el, i) => {
+        (el as HTMLElement).style.transitionDelay = `${i * 60}ms`;
+        observer.observe(el);
+      });
+    </script>
   </body>
 </html>

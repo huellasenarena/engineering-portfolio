@@ -3,20 +3,15 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const cvAvailable = false; // flip to true when CVs are ready
 ---
 
-<section id="contact">
+<section id="contact" data-reveal>
   <div class="container container--narrow">
     <h2 class="section-title">{t('contact.title')}</h2>
 
     <div class="links">
-      <a href="mailto:georg.dreym@gmail.com" class="contact-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-        </svg>
-        {t('contact.email')}
-      </a>
-
       <a href="https://github.com/JNS99" target="_blank" rel="noopener" class="contact-link">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
@@ -24,19 +19,37 @@ const t = useTranslations(lang);
         {t('contact.github')}
       </a>
 
-      <a href="/cv-es.pdf" download class="contact-link contact-link--cv">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-        </svg>
-        {t('contact.cv')} (ES)
-      </a>
+      {cvAvailable ? (
+        <a href="/cv-es.pdf" download class="contact-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          </svg>
+          {t('contact.cv')} (ES)
+        </a>
+      ) : (
+        <span class="contact-link contact-link--disabled">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          </svg>
+          CV (ES) — {t('contact.cv.soon')}
+        </span>
+      )}
 
-      <a href="/cv-en.pdf" download class="contact-link contact-link--cv">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-        </svg>
-        {t('contact.cv')} (EN)
-      </a>
+      {cvAvailable ? (
+        <a href="/cv-en.pdf" download class="contact-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          </svg>
+          {t('contact.cv')} (EN)
+        </a>
+      ) : (
+        <span class="contact-link contact-link--disabled">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+          </svg>
+          CV (EN) — {t('contact.cv.soon')}
+        </span>
+      )}
     </div>
   </div>
 </section>
@@ -50,28 +63,42 @@ const t = useTranslations(lang);
   }
 
   .links {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+    max-width: 600px;
+  }
+
+  @media (max-width: 500px) {
+    .links {
+      grid-template-columns: 1fr;
+    }
   }
 
   .contact-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.25rem;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-muted);
     transition: all var(--transition);
+    white-space: nowrap;
   }
 
-  .contact-link:hover {
+  .contact-link:not(.contact-link--disabled):hover {
     border-color: var(--accent);
     color: var(--text);
+  }
+
+  .contact-link--disabled {
+    opacity: 0.45;
+    cursor: default;
+    font-size: 0.8rem;
   }
 
   .contact-link svg {

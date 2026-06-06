@@ -4,18 +4,24 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const languages = [
-  { name: lang === 'es' ? 'Inglés' : 'English',  level: lang === 'es' ? 'Nativo' : 'Native' },
-  { name: lang === 'es' ? 'Español' : 'Spanish',  level: lang === 'es' ? 'Nativo' : 'Native' },
-  { name: lang === 'es' ? 'Francés' : 'French',  level: 'DALF C1' },
-  { name: lang === 'es' ? 'Griego' : 'Greek',  level: lang === 'es' ? 'Conversacional' : 'Conversational' },
-];
+const languages = lang === 'es'
+  ? [
+      { name: 'Inglés',   level: 'Nativo' },
+      { name: 'Español',  level: 'B2 / C1' },
+      { name: 'Francés',  level: 'DALF C1' },
+      { name: 'Griego',   level: 'B2' },
+    ]
+  : [
+      { name: 'English',  level: 'Native' },
+      { name: 'Spanish',  level: 'B2 / C1' },
+      { name: 'French',   level: 'DALF C1' },
+      { name: 'Greek',    level: 'B2' },
+    ];
 ---
 
-<section id="about">
+<section id="about" data-reveal>
   <div class="container container--narrow">
     <h2 class="section-title">{t('about.title')}</h2>
-
     <p class="body-text">{t('about.body')}</p>
 
     <div class="languages">
@@ -25,21 +31,6 @@ const languages = [
           <span class="lang-level">{level}</span>
         </div>
       ))}
-    </div>
-
-    <div class="credentials">
-      <div class="cred">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-        <span>{t('about.cert')}</span>
-      </div>
-      <div class="cred">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-        </svg>
-        <span>{t('about.teaching')}</span>
-      </div>
     </div>
   </div>
 </section>
@@ -61,19 +52,29 @@ const languages = [
 
   .languages {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
-    margin-bottom: 2.5rem;
+  }
+
+  @media (min-width: 480px) {
+    .languages {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   .lang-item {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.3rem;
+    transition: border-color var(--transition);
+  }
+
+  .lang-item:hover {
+    border-color: var(--accent);
   }
 
   .lang-name {
@@ -86,25 +87,5 @@ const languages = [
     font-size: 0.8rem;
     color: var(--accent);
     font-weight: 500;
-  }
-
-  .credentials {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .cred {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-  }
-
-  .cred svg {
-    color: var(--accent);
-    flex-shrink: 0;
-    margin-top: 0.1rem;
   }
 </style>

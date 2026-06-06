@@ -11,83 +11,147 @@ interface Props {
 const { project, lang } = Astro.props;
 const t = useTranslations(lang);
 const content = project[lang];
+const modalId = `modal-${project.slug}`;
+
+const icons: Record<string, string> = {
+  'vocab-app': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6l-.7 2H9l-.7-2A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/><path d="M10 17v-2a2 2 0 0 0-2-2H6"/><path d="M14 17v-2a2 2 0 0 1 2-2h2"/></svg>`,
+  'europresse-reader': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h4"/></svg>`,
+  'que-mal-poema': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+  'vertex-ml': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><path d="M12 7v4m0 0-5 6m5-6 5 6"/></svg>`,
+};
 ---
 
-<article class:list={['card', { 'card--wip': project.wip }]}>
-  <div class="card__header">
-    <h3 class="card__title">{content.title}</h3>
-    {project.wip && <span class="badge">{t('projects.wip')}</span>}
-  </div>
+<article class:list={['card', { 'card--wip': project.wip }]} data-reveal>
+  <button class="card__inner" onclick={`document.getElementById('${modalId}').showModal()`} aria-haspopup="dialog">
+    <div class="card__header">
+      <span class="card__icon" set:html={icons[project.slug] ?? icons['vertex-ml']} />
+      <div class="card__title-row">
+        <h3 class="card__title">{content.title}</h3>
+        {project.wip && <span class="badge">{t('projects.wip')}</span>}
+      </div>
+    </div>
 
-  <dl class="card__body">
-    <div class="card__row">
+    <dl class="card__body">
+      <div class="card__row">
+        <dt>{t('projects.problem')}</dt>
+        <dd>{content.problem}</dd>
+      </div>
+      <div class="card__row">
+        <dt>{t('projects.solution')}</dt>
+        <dd>{content.solution}</dd>
+      </div>
+    </dl>
+
+    <div class="card__footer">
+      <ul class="stack" aria-label={t('projects.stack')}>
+        {project.stack.map((tag) => <li>{tag}</li>)}
+      </ul>
+      {!project.wip && (
+        <span class="card__more">
+          {t('projects.link')}
+        </span>
+      )}
+    </div>
+  </button>
+</article>
+
+<dialog id={modalId} class="project-modal">
+  <div class="modal__inner">
+    <button class="modal__close" onclick={`document.getElementById('${modalId}').close()`} aria-label="Cerrar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="modal__icon" set:html={icons[project.slug] ?? icons['vertex-ml']} />
+    <h2 class="modal__title">{content.title}</h2>
+    {project.wip && <span class="badge">{t('projects.wip')}</span>}
+
+    <dl class="modal__body">
       <dt>{t('projects.problem')}</dt>
       <dd>{content.problem}</dd>
-    </div>
-    <div class="card__row">
       <dt>{t('projects.solution')}</dt>
       <dd>{content.solution}</dd>
-    </div>
-  </dl>
+      <dt>{t('projects.stack')}</dt>
+      <dd>
+        <ul class="stack">
+          {project.stack.map((tag) => <li>{tag}</li>)}
+        </ul>
+      </dd>
+    </dl>
 
-  <div class="card__footer">
-    <ul class="stack" aria-label={t('projects.stack')}>
-      {project.stack.map((tag) => <li>{tag}</li>)}
-    </ul>
-
-    <div class="card__links">
+    <div class="modal__links">
       {project.github && (
-        <a href={project.github} target="_blank" rel="noopener" aria-label="GitHub">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
+        <a href={project.github} target="_blank" rel="noopener" class="modal__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
         </a>
       )}
       {project.link && !project.wip && (
-        <a href={project.link} target="_blank" rel="noopener" class="card__link-text">
+        <a href={project.link} target="_blank" rel="noopener" class="modal__link modal__link--accent">
           {t('projects.link')}
         </a>
       )}
     </div>
   </div>
-</article>
+</dialog>
 
 <style>
   .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
     border-radius: calc(var(--radius) * 1.5);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    transition: border-color var(--transition), transform var(--transition);
-  }
-
-  .card:hover {
-    border-color: var(--border);
-    transform: translateY(-2px);
+    overflow: hidden;
   }
 
   .card--wip {
-    opacity: 0.65;
+    opacity: 0.55;
   }
 
   .card--wip:hover {
-    opacity: 0.8;
-    transform: none;
+    opacity: 0.72;
+  }
+
+  .card__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.5);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+    color: inherit;
+    font-family: inherit;
+  }
+
+  .card:not(.card--wip) .card__inner:hover {
+    border-color: rgba(196, 124, 90, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   }
 
   .card__header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
     gap: 1rem;
+  }
+
+  .card__icon {
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .card__title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .card__title {
     font-family: var(--font-serif);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--text);
   }
@@ -118,18 +182,18 @@ const content = project[lang];
   }
 
   dt {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--accent);
     padding-top: 0.1rem;
   }
 
   dd {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
   .card__footer {
@@ -138,7 +202,7 @@ const content = project[lang];
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--border);
   }
 
@@ -150,38 +214,155 @@ const content = project[lang];
   }
 
   .stack li {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 500;
-    padding: 0.2rem 0.6rem;
+    padding: 0.2rem 0.55rem;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     color: var(--text-muted);
-    letter-spacing: 0.02em;
   }
 
-  .card__links {
+  .card__more {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .card__inner:hover .card__more {
+    opacity: 1;
+  }
+
+  /* Modal */
+  .project-modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 2);
+    color: var(--text);
+    max-width: 560px;
+    width: calc(100% - 3rem);
+    padding: 0;
+    margin: auto;
+  }
+
+  .project-modal::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal__inner {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.3rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    transition: all var(--transition);
   }
 
-  .card__links a {
-    color: var(--text-subtle);
-    transition: color var(--transition);
+  .modal__close:hover {
+    border-color: var(--accent);
+    color: var(--text);
   }
 
-  .card__links a:hover {
+  .modal__icon {
     color: var(--accent);
   }
 
-  .card__link-text {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--accent) !important;
+  .modal__title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
   }
 
-  .card__link-text:hover {
-    color: var(--accent-hover) !important;
+  .modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .modal__body dt {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.5rem;
+  }
+
+  .modal__body dt:first-child {
+    margin-top: 0;
+  }
+
+  .modal__body dd {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .modal__links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .modal__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all var(--transition);
+  }
+
+  .modal__link:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .modal__link--accent {
+    background: var(--accent);
+    border-color: transparent;
+    color: var(--bg);
+    font-weight: 600;
+  }
+
+  .modal__link--accent:hover {
+    background: var(--accent-hover);
+    color: var(--bg);
   }
 </style>
+
+<script>
+  document.querySelectorAll('.project-modal').forEach((modal) => {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) (modal as HTMLDialogElement).close();
+    });
+  });
+</script>

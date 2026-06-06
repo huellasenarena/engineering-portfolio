@@ -9,12 +9,11 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
 ---
 
 <section class="hero" id="hero">
-  <!-- Drop your photo at public/photos/hero.jpg to activate the background -->
+  <!-- Hero background: change 'jet.jpg' to any photo in public/photos/ -->
   <div class="hero__bg" aria-hidden="true"></div>
   <div class="hero__overlay" aria-hidden="true"></div>
 
   <div class="container hero__content">
-    <p class="hero__eyebrow">Jack Stefanou</p>
     <h1 class="hero__tagline">{t('hero.tagline')}</h1>
     <p class="hero__sub">{t('hero.sub')}</p>
 
@@ -48,9 +47,9 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
   .hero__bg {
     position: absolute;
     inset: 0;
-    background-image: url('/photos/hero.jpg');
+    background-image: url('/photos/jet.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center 30%;
     transform: scale(1.04);
     transition: transform 8s ease;
   }
@@ -77,12 +76,10 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
     max-width: 760px;
   }
 
-  .hero__eyebrow {
-    font-family: var(--font-serif);
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    margin-bottom: 1rem;
+  .hero__content > * {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
   .hero__tagline {
@@ -93,6 +90,7 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
     line-height: 1.15;
     margin-bottom: 1.5rem;
     letter-spacing: -0.01em;
+    animation-delay: 200ms;
   }
 
   .hero__sub {
@@ -100,12 +98,18 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
     color: var(--text-muted);
     letter-spacing: 0.02em;
     margin-bottom: 2.5rem;
+    animation-delay: 380ms;
   }
 
   .hero__ctas {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    animation-delay: 540ms;
+  }
+
+  @keyframes heroFadeUp {
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .btn {
