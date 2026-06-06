@@ -212,9 +212,11 @@ const heroPhotos = ['fountain.jpg', 'jet.jpg', 'skater.jpg', 'street.jpg'];
     }, { passive: true });
   }
 
-  // Cross-fade slideshow between hero photos
+  // Cross-fade slideshow between hero photos.
+  // An opacity cross-fade isn't "motion", so it runs even with reduced-motion
+  // (where it simply becomes an instant swap via the global transition override).
   const slides = Array.from(document.querySelectorAll<HTMLElement>('.hero__slide'));
-  if (slides.length > 1 && !reduce) {
+  if (slides.length > 1) {
     // Preload the non-active photos so the first transition is smooth
     slides.slice(1).forEach((s) => {
       const url = s.style.backgroundImage.slice(5, -2);
