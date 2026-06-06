@@ -48,7 +48,7 @@ const icons: Record<string, string> = {
       </ul>
       {!project.wip && (
         <span class="card__more">
-          {t('projects.link')}
+          {t('projects.details')}
         </span>
       )}
     </div>
@@ -87,7 +87,7 @@ const icons: Record<string, string> = {
       )}
       {project.link && !project.wip && (
         <a href={project.link} target="_blank" rel="noopener" class="modal__link modal__link--accent">
-          {t('projects.link')}
+          {t('projects.live')}
         </a>
       )}
     </div>
@@ -118,9 +118,15 @@ const icons: Record<string, string> = {
     border-radius: calc(var(--radius) * 1.5);
     text-align: left;
     cursor: pointer;
-    transition: border-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+    transition: border-color 0.3s var(--ease), transform 0.3s var(--ease),
+                box-shadow 0.3s var(--ease);
+    will-change: transform;
     color: inherit;
     font-family: inherit;
+  }
+
+  .card:not(.card--wip) .card__inner:active {
+    transform: translateY(-2px) scale(0.995);
   }
 
   .card:not(.card--wip) .card__inner:hover {
@@ -272,7 +278,7 @@ const icons: Record<string, string> = {
     padding: 0.3rem;
     display: flex;
     align-items: center;
-    transition: all var(--transition);
+    transition: border-color var(--transition), color var(--transition);
   }
 
   .modal__close:hover {
@@ -337,7 +343,8 @@ const icons: Record<string, string> = {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-muted);
-    transition: all var(--transition);
+    transition: border-color var(--transition), color var(--transition),
+                background-color var(--transition);
   }
 
   .modal__link:hover {

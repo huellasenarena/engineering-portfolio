@@ -18,7 +18,8 @@ export const ui = {
     'projects.problem': 'Problema',
     'projects.solution': 'Solución',
     'projects.stack': 'Stack',
-    'projects.link': 'Ver proyecto →',
+    'projects.details': 'Ver detalles',
+    'projects.live': 'Visitar sitio →',
     'projects.wip': 'En construcción',
 
     'about.title': 'Sobre mí',
@@ -47,7 +48,8 @@ export const ui = {
     'projects.problem': 'Problem',
     'projects.solution': 'Solution',
     'projects.stack': 'Stack',
-    'projects.link': 'View project →',
+    'projects.details': 'View details',
+    'projects.live': 'Visit site →',
     'projects.wip': 'In progress',
 
     'about.title': 'About',

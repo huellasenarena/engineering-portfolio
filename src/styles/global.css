@@ -18,7 +18,8 @@
   --container-narrow: 720px;
 
   --radius: 6px;
-  --transition: 200ms ease;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 260ms var(--ease);
 }
 
 *, *::before, *::after {

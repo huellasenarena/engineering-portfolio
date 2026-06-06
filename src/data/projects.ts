@@ -49,20 +49,23 @@ export const projects: Project[] = [
   },
   {
     slug: 'que-mal-poema',
+    link: 'https://quemalpoema.com',
     github: 'https://github.com/huellasenarena/qmp',
     es: {
       title: 'Qué Mal Poema',
-      problem: 'Publicar poesía diaria sin infraestructura costosa ni CMS pesado.',
+      problem:
+        'Publicar poesía a diario es insostenible si cada entrada exige formatear, subir archivos y desplegar el sitio a mano.',
       solution:
-        'Plataforma estática generada con GitHub Actions: cada push publica un poema nuevo usando la Google Docs API.',
+        'Pipeline automatizado de punta a punta: escribo en el iPad, ejecuto un atajo, y el contenido viaja por Apps Script, Google Docs API, OpenAI y GitHub Actions hasta publicarse solo. +160 entradas sin interrupción.',
     },
     en: {
       title: 'Qué Mal Poema',
-      problem: 'Publishing daily poetry without costly infrastructure or a heavy CMS.',
+      problem:
+        'Publishing poetry daily is unsustainable if every entry means formatting, uploading files, and deploying the site by hand.',
       solution:
-        'Static platform generated via GitHub Actions: each push publishes a new poem using the Google Docs API.',
+        'A fully automated pipeline: I write on my iPad, run a Shortcut, and the content flows through Apps Script, Google Docs API, OpenAI, and GitHub Actions to publish itself. 160+ entries, uninterrupted.',
     },
-    stack: ['GitHub Actions', 'Google Docs API', 'Python', 'HTML/CSS'],
+    stack: ['Python', 'GitHub Actions', 'Google Docs API', 'OpenAI', 'Apps Script', 'Telegram Bot'],
   },
   {
     slug: 'vertex-ml',
