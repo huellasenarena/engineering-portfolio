@@ -14,7 +14,7 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
 
 <header>
   <div class="container">
-    <a href={lang === 'es' ? '/' : '/en/'} class="logo">Jack Stefanou</a>
+    <a href={lang === 'es' ? '/' : '/en/'} class="logo" data-scroll-top>Jack Stefanou</a>
     <nav>
       <a href={projectsHref}>{t('nav.projects')}</a>
       <a href={aboutHref}>{t('nav.about')}</a>
@@ -110,10 +110,13 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
 <script>
   const header = document.querySelector('header');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
-    }
+    header?.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
+
+  document.querySelector('[data-scroll-top]')?.addEventListener('click', (e) => {
+    if (window.scrollY > 0) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
 </script>
