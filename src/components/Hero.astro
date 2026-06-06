@@ -46,16 +46,12 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
 
   .hero__bg {
     position: absolute;
-    inset: 0;
+    inset: -10% 0;
     background-image: url('/photos/fountain.jpg');
     background-size: cover;
     background-position: center 40%;
-    transform: scale(1.04);
-    transition: transform 8s ease;
-  }
-
-  .hero:hover .hero__bg {
-    transform: scale(1);
+    transform: scale(1.12) translateY(0);
+    will-change: transform;
   }
 
   .hero__overlay {
@@ -173,3 +169,27 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
     50% { transform: translateX(-50%) translateY(6px); }
   }
 </style>
+
+<script>
+  // Subtle parallax on the hero photo
+  const bg = document.querySelector<HTMLElement>('.hero__bg');
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (bg && hero && !reduce) {
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      if (y < hero.offsetHeight) {
+        bg.style.transform = `scale(1.12) translateY(${y * 0.18}px)`;
+      }
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+</script>

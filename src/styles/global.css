@@ -93,6 +93,27 @@ img {
   transform: translateY(0);
 }
 
+/* Animated underline that draws under section titles when revealed */
+.section-title {
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease) 0.2s;
+}
+.js [data-reveal].is-visible .section-title::after {
+  transform: scaleX(1);
+}
+
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

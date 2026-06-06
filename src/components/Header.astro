@@ -1,10 +1,15 @@
 ---
 import { getLangFromUrl, getAlternateUrl, useTranslations } from '../i18n/utils';
 
+interface Props {
+  altUrl?: string;
+}
+
+const { altUrl } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const alternateLang = lang === 'es' ? 'en' : 'es';
-const alternateUrl = getAlternateUrl(Astro.url, alternateLang);
+const alternateUrl = altUrl ?? getAlternateUrl(Astro.url, alternateLang);
 const alternateLabel = alternateLang.toUpperCase();
 
 const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
@@ -122,8 +127,11 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
     header?.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
-  document.querySelector('[data-scroll-top]')?.addEventListener('click', (e) => {
-    if (window.scrollY > 0) {
+  const logo = document.querySelector<HTMLAnchorElement>('[data-scroll-top]');
+  logo?.addEventListener('click', (e) => {
+    const target = new URL(logo.href).pathname;
+    // Only smooth-scroll when already on the page the logo points to
+    if (window.location.pathname === target && window.scrollY > 0) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

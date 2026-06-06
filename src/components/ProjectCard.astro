@@ -2,6 +2,7 @@
 import type { Project } from '../data/projects';
 import type { Lang } from '../i18n/utils';
 import { useTranslations } from '../i18n/utils';
+import { projectUrl } from '../data/projects';
 
 interface Props {
   project: Project;
@@ -13,6 +14,14 @@ const t = useTranslations(lang);
 const content = project[lang];
 const modalId = `modal-${project.slug}`;
 
+// Projects with a full case study link to a dedicated page; others open a modal.
+const hasCase = !!project.caseStudy;
+const caseUrl = hasCase ? projectUrl(project.slug, lang) : undefined;
+const Wrapper = hasCase ? 'a' : 'button';
+const wrapperProps = hasCase
+  ? { href: caseUrl }
+  : { type: 'button', 'aria-haspopup': 'dialog', onclick: `document.getElementById('${modalId}').showModal()` };
+
 const icons: Record<string, string> = {
   'vocab-app': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6l-.7 2H9l-.7-2A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/><path d="M10 17v-2a2 2 0 0 0-2-2H6"/><path d="M14 17v-2a2 2 0 0 1 2-2h2"/></svg>`,
   'europresse-reader': `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h4"/></svg>`,
@@ -22,7 +31,8 @@ const icons: Record<string, string> = {
 ---
 
 <article class:list={['card', { 'card--wip': project.wip }]} data-reveal>
-  <button class="card__inner" onclick={`document.getElementById('${modalId}').showModal()`} aria-haspopup="dialog">
+  <Wrapper class="card__inner" {...wrapperProps}>
+    <span class="card__glow" aria-hidden="true"></span>
     <div class="card__header">
       <span class="card__icon" set:html={icons[project.slug] ?? icons['vertex-ml']} />
       <div class="card__title-row">
@@ -52,9 +62,10 @@ const icons: Record<string, string> = {
         </span>
       )}
     </div>
-  </button>
+  </Wrapper>
 </article>
 
+{!hasCase && (
 <dialog id={modalId} class="project-modal">
   <div class="modal__inner">
     <button class="modal__close" onclick={`document.getElementById('${modalId}').close()`} aria-label="Cerrar">
@@ -93,6 +104,7 @@ const icons: Record<string, string> = {
     </div>
   </div>
 </dialog>
+)}
 
 <style>
   .card {
@@ -108,6 +120,8 @@ const icons: Record<string, string> = {
   }
 
   .card__inner {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -133,6 +147,31 @@ const icons: Record<string, string> = {
     border-color: rgba(196, 124, 90, 0.55);
     transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  /* Cursor-follow spotlight */
+  .card__glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition);
+    background: radial-gradient(
+      460px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(196, 124, 90, 0.13),
+      transparent 45%
+    );
+  }
+  .card:not(.card--wip) .card__inner:hover .card__glow {
+    opacity: 1;
+  }
+
+  .card__header,
+  .card__body,
+  .card__footer {
+    position: relative;
+    z-index: 1;
   }
 
   .card__header {
@@ -366,9 +405,21 @@ const icons: Record<string, string> = {
 </style>
 
 <script>
+  // Close modal when clicking the backdrop
   document.querySelectorAll('.project-modal').forEach((modal) => {
     modal.addEventListener('click', (e) => {
       if (e.target === modal) (modal as HTMLDialogElement).close();
     });
   });
+
+  // Cursor-follow spotlight on cards
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLElement>('.card__inner').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
 </script>

@@ -1,0 +1,393 @@
+---
+import type { Project } from '../data/projects';
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+}
+
+const { project, lang } = Astro.props;
+const t = useTranslations(lang);
+const cs = project.caseStudy![lang];
+const content = project[lang];
+const backHref = lang === 'es' ? '/#projects' : '/en/#projects';
+---
+
+<article class="cs">
+  <a href={backHref} class="cs__back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    {t('cs.back')}
+  </a>
+
+  <header class="cs__header">
+    <h1 class="cs__title">{content.title}</h1>
+    <p class="cs__tagline">{cs.tagline}</p>
+    <p class="cs__meta">{cs.meta}</p>
+
+    <div class="cs__actions">
+      {project.link && (
+        <a href={project.link} target="_blank" rel="noopener" class="cs__btn cs__btn--accent">{t('cs.viewLive')}</a>
+      )}
+      {project.github && (
+        <a href={project.github} target="_blank" rel="noopener" class="cs__btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          {t('cs.viewCode')}
+        </a>
+      )}
+    </div>
+
+    {cs.metrics.length > 0 && (
+      <div class="cs__metrics">
+        {cs.metrics.map((m) => (
+          <div class="metric">
+            <span class="metric__value" data-count={m.value} data-suffix={m.suffix ?? ''}>0</span>
+            <span class="metric__label">{m.label}</span>
+          </div>
+        ))}
+      </div>
+    )}
+  </header>
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.overview')}</h2>
+    {cs.overview.map((p) => <p>{p}</p>)}
+  </section>
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.problem')}</h2>
+    {cs.problem.map((p) => <p>{p}</p>)}
+  </section>
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.solution')}</h2>
+    <p>{cs.solutionIntro}</p>
+    <ol class="cs__steps">
+      {cs.steps.map((step) => <li>{step}</li>)}
+    </ol>
+  </section>
+
+  {cs.architecture && (
+    <section class="cs__section" data-reveal>
+      <h2>{t('cs.architecture')}</h2>
+      <pre class="cs__diagram">{cs.architecture}</pre>
+      <p class="cs__diagram-note">{t('cs.diagramNote')}</p>
+    </section>
+  )}
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.stack')}</h2>
+    <table class="cs__table">
+      <thead>
+        <tr><th>{t('cs.stack.layer')}</th><th>{t('cs.stack.tech')}</th></tr>
+      </thead>
+      <tbody>
+        {cs.stack.map((row) => (
+          <tr><td>{row.layer}</td><td>{row.tech}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.challenges')}</h2>
+    <div class="cs__challenges">
+      {cs.challenges.map((c) => (
+        <div class="challenge">
+          <h3>{c.title}</h3>
+          <p>{c.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="cs__section" data-reveal>
+    <h2>{t('cs.results')}</h2>
+    <ul class="cs__results">
+      {cs.results.map((r) => <li>{r}</li>)}
+    </ul>
+  </section>
+
+  <section class="cs__section cs__demonstrates" data-reveal>
+    <h2>{t('cs.demonstrates')}</h2>
+    <p>{cs.demonstrates}</p>
+  </section>
+</article>
+
+<style>
+  .cs {
+    max-width: var(--container-narrow);
+    margin: 0 auto;
+    padding: 8rem 1.5rem 6rem;
+  }
+
+  .cs__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    transition: color var(--transition), gap var(--transition);
+  }
+  .cs__back:hover { color: var(--accent); gap: 0.7rem; }
+
+  .cs__header { margin-bottom: 4rem; }
+
+  .cs__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 5vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .cs__tagline {
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .cs__meta {
+    font-size: 0.85rem;
+    color: var(--text-subtle);
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+
+  .cs__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .cs__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: border-color var(--transition), color var(--transition),
+                background-color var(--transition), transform var(--transition);
+  }
+  .cs__btn:hover { border-color: var(--accent); color: var(--text); }
+  .cs__btn:active { transform: scale(0.97); }
+  .cs__btn--accent {
+    background: var(--accent);
+    border-color: transparent;
+    color: var(--bg);
+    font-weight: 600;
+  }
+  .cs__btn--accent:hover { background: var(--accent-hover); color: var(--bg); }
+
+  .cs__metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 1.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.5);
+  }
+  @media (max-width: 520px) { .cs__metrics { grid-template-columns: 1fr; gap: 1.5rem; } }
+
+  .metric { display: flex; flex-direction: column; gap: 0.3rem; }
+  .metric__value {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .metric__label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .cs__section { margin-bottom: 3.5rem; }
+
+  .cs__section h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cs__section p {
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .cs__steps {
+    list-style: none;
+    counter-reset: step;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .cs__steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 3rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .cs__steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: -0.1rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .cs__diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--text);
+    white-space: pre;
+  }
+  .cs__diagram-note {
+    font-size: 0.85rem !important;
+    font-style: italic;
+    color: var(--text-subtle) !important;
+    margin-top: 0.75rem;
+  }
+
+  .cs__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+  .cs__table th {
+    text-align: left;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs__table td {
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+  }
+  .cs__table td:first-child { color: var(--text); font-weight: 500; white-space: nowrap; }
+  @media (max-width: 520px) {
+    .cs__table td:first-child { white-space: normal; }
+  }
+
+  .cs__challenges {
+    display: grid;
+    gap: 1rem;
+  }
+  .challenge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+  .challenge h3 {
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .challenge p { font-size: 0.875rem; margin-bottom: 0; }
+
+  .cs__results {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .cs__results li {
+    position: relative;
+    padding-left: 1.75rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .cs__results li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .cs__demonstrates p {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text);
+    font-style: italic;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--accent);
+  }
+</style>
+
+<script>
+  function animateCount(el: HTMLElement) {
+    const target = Number(el.dataset.count || '0');
+    const suffix = el.dataset.suffix || '';
+    const duration = 1400;
+    const start = performance.now();
+    function tick(now: number) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target).toString() + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+
+  if (reduce) {
+    counters.forEach((el) => {
+      el.textContent = (el.dataset.count || '0') + (el.dataset.suffix || '');
+    });
+  } else {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          animateCount(e.target as HTMLElement);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach((el) => obs.observe(el));
+  }
+</script>

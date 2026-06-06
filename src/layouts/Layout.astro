@@ -5,12 +5,13 @@ import { getLangFromUrl, getAlternateUrl } from '../i18n/utils';
 interface Props {
   title?: string;
   description?: string;
+  altPath?: string;
 }
 
-const { title = 'Jack Stefanou', description = 'Full-stack developer specializing in AI.' } = Astro.props;
+const { title = 'Jack Stefanou', description = 'Full-stack developer specializing in AI.', altPath } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const alternateLang = lang === 'es' ? 'en' : 'es';
-const alternateUrl = getAlternateUrl(Astro.url, alternateLang);
+const alternateUrl = altPath ?? getAlternateUrl(Astro.url, alternateLang);
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og-image.jpg', Astro.site).href;

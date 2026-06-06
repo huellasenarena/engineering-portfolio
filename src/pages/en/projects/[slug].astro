@@ -1,0 +1,26 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import CaseStudy from '../../../components/CaseStudy.astro';
+import { projects, projectUrl } from '../../../data/projects';
+
+export function getStaticPaths() {
+  return projects
+    .filter((p) => p.caseStudy)
+    .map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const cs = project.caseStudy!.en;
+---
+
+<Layout
+  title={`${project.en.title} — Jack Stefanou`}
+  description={cs.tagline}
+  altPath={projectUrl(project.slug, 'es')}
+>
+  <Header altUrl={projectUrl(project.slug, 'es')} />
+  <main>
+    <CaseStudy project={project} lang="en" />
+  </main>
+</Layout>
