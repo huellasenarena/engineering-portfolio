@@ -97,7 +97,6 @@ const icons: Record<string, string> = {
 <style>
   .card {
     border-radius: calc(var(--radius) * 1.5);
-    overflow: hidden;
   }
 
   .card--wip {
@@ -125,6 +124,7 @@ const icons: Record<string, string> = {
   }
 
   .card:not(.card--wip) .card__inner:hover {
+    border-color: rgba(196, 124, 90, 0.55);
     transform: translateY(-4px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
   }
