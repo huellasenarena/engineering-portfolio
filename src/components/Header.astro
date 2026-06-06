@@ -42,7 +42,7 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
     background: transparent;
     border-bottom: 1px solid transparent;
     transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease),
-                border-color 0.4s var(--ease), padding 0.3s var(--ease);
+                border-color 0.4s var(--ease);
   }
 
   /* Keep nav legible over the photo while the bar is transparent */
@@ -52,7 +52,6 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
   }
 
   header.scrolled {
-    padding: 0.9rem 0;
     background: rgba(15, 14, 13, 0.82);
     backdrop-filter: blur(14px) saturate(1.2);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
