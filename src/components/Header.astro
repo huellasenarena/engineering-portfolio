@@ -1,0 +1,119 @@
+---
+import { getLangFromUrl, getAlternateUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const alternateLang = lang === 'es' ? 'en' : 'es';
+const alternateUrl = getAlternateUrl(Astro.url, alternateLang);
+const alternateLabel = alternateLang.toUpperCase();
+
+const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
+const aboutHref = lang === 'es' ? '/#about' : '/en/#about';
+const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
+---
+
+<header>
+  <div class="container">
+    <a href={lang === 'es' ? '/' : '/en/'} class="logo">Jack Stefanou</a>
+    <nav>
+      <a href={projectsHref}>{t('nav.projects')}</a>
+      <a href={aboutHref}>{t('nav.about')}</a>
+      <a href={contactHref}>{t('nav.contact')}</a>
+      <a href={alternateUrl} class="lang-toggle" aria-label={`Switch to ${alternateLang}`}>
+        {alternateLabel}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.25rem 0;
+    background: linear-gradient(to bottom, rgba(15,14,13,0.95) 0%, rgba(15,14,13,0) 100%);
+    backdrop-filter: blur(0px);
+    transition: background var(--transition), backdrop-filter var(--transition);
+  }
+
+  header.scrolled {
+    background: rgba(15,14,13,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    transition: color var(--transition);
+  }
+
+  .logo:hover {
+    color: var(--accent);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  nav a {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    transition: color var(--transition);
+  }
+
+  nav a:hover {
+    color: var(--text);
+  }
+
+  .lang-toggle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-muted) !important;
+    transition: border-color var(--transition), color var(--transition) !important;
+  }
+
+  .lang-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent) !important;
+  }
+
+  @media (max-width: 640px) {
+    nav {
+      gap: 1.25rem;
+    }
+    nav a:not(.lang-toggle) {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  }, { passive: true });
+</script>

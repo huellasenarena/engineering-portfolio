@@ -1,0 +1,36 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { projects } from '../data/projects';
+import ProjectCard from './ProjectCard.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const featured = projects.filter((p) => !p.wip);
+const wip = projects.filter((p) => p.wip);
+---
+
+<section id="projects">
+  <div class="container">
+    <h2 class="section-title">{t('projects.title')}</h2>
+    <div class="grid">
+      {featured.map((p) => <ProjectCard project={p} lang={lang} />)}
+      {wip.map((p) => <ProjectCard project={p} lang={lang} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    color: var(--text);
+    margin-bottom: 3rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
+    gap: 1.5rem;
+  }
+</style>

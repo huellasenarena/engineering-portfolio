@@ -1,0 +1,110 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const languages = [
+  { name: lang === 'es' ? 'Inglés' : 'English',  level: lang === 'es' ? 'Nativo' : 'Native' },
+  { name: lang === 'es' ? 'Español' : 'Spanish',  level: lang === 'es' ? 'Nativo' : 'Native' },
+  { name: lang === 'es' ? 'Francés' : 'French',  level: 'DALF C1' },
+  { name: lang === 'es' ? 'Griego' : 'Greek',  level: lang === 'es' ? 'Conversacional' : 'Conversational' },
+];
+---
+
+<section id="about">
+  <div class="container container--narrow">
+    <h2 class="section-title">{t('about.title')}</h2>
+
+    <p class="body-text">{t('about.body')}</p>
+
+    <div class="languages">
+      {languages.map(({ name, level }) => (
+        <div class="lang-item">
+          <span class="lang-name">{name}</span>
+          <span class="lang-level">{level}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="credentials">
+      <div class="cred">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span>{t('about.cert')}</span>
+      </div>
+      <div class="cred">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+        </svg>
+        <span>{t('about.teaching')}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    color: var(--text);
+    margin-bottom: 2rem;
+  }
+
+  .body-text {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+  }
+
+  .languages {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .lang-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .lang-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .lang-level {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cred {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .cred svg {
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+</style>
