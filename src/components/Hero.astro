@@ -6,11 +6,20 @@ const t = useTranslations(lang);
 
 const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
 const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
+
+// Hero background slideshow — add/remove filenames in public/photos/ to change rotation
+const heroPhotos = ['fountain.jpg', 'jet.jpg', 'skater.jpg', 'street.jpg'];
 ---
 
 <section class="hero" id="hero">
-  <!-- Hero background: change 'fountain.jpg' (in .hero__bg below) to any photo in public/photos/ -->
-  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="hero__bg" aria-hidden="true">
+    {heroPhotos.map((photo, i) => (
+      <div
+        class:list={['hero__slide', { 'is-active': i === 0 }]}
+        style={`background-image: url('/photos/${photo}')`}
+      />
+    ))}
+  </div>
   <div class="hero__overlay" aria-hidden="true"></div>
 
   <div class="container hero__content">
@@ -47,11 +56,21 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
   .hero__bg {
     position: absolute;
     inset: -10% 0;
-    background-image: url('/photos/fountain.jpg');
-    background-size: cover;
-    background-position: center 40%;
     transform: scale(1.12) translateY(0);
     will-change: transform;
+  }
+
+  .hero__slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 40%;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+
+  .hero__slide.is-active {
+    opacity: 1;
   }
 
   .hero__overlay {
@@ -191,5 +210,23 @@ const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
         ticking = true;
       }
     }, { passive: true });
+  }
+
+  // Cross-fade slideshow between hero photos
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('.hero__slide'));
+  if (slides.length > 1 && !reduce) {
+    // Preload the non-active photos so the first transition is smooth
+    slides.slice(1).forEach((s) => {
+      const url = s.style.backgroundImage.slice(5, -2);
+      const img = new Image();
+      img.src = url;
+    });
+
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('is-active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('is-active');
+    }, 6500);
   }
 </script>

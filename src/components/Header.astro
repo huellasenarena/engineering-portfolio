@@ -39,16 +39,24 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
     right: 0;
     z-index: 100;
     padding: 1.25rem 0;
-    background: transparent;
+    background: rgba(15, 14, 13, 0);
     border-bottom: 1px solid transparent;
-    transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease),
-                border-color 0.4s var(--ease);
+    /* blur starts at 0 so it can interpolate smoothly to the scrolled state */
+    backdrop-filter: blur(0px) saturate(1);
+    -webkit-backdrop-filter: blur(0px) saturate(1);
+    transition: background 0.55s var(--ease), backdrop-filter 0.55s var(--ease),
+                -webkit-backdrop-filter 0.55s var(--ease), border-color 0.55s var(--ease);
   }
 
   /* Keep nav legible over the photo while the bar is transparent */
-  header:not(.scrolled) .logo,
-  header:not(.scrolled) nav a {
+  .logo,
+  nav a {
     text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
+    transition: color var(--transition), text-shadow 0.55s var(--ease);
+  }
+  header.scrolled .logo,
+  header.scrolled nav a {
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0);
   }
 
   header.scrolled {
@@ -69,7 +77,6 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
     font-size: 1.1rem;
     letter-spacing: 0.01em;
     color: var(--text);
-    transition: color var(--transition);
   }
 
   .logo:hover {
@@ -87,7 +94,6 @@ const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
     font-weight: 500;
     color: var(--text-muted);
     letter-spacing: 0.02em;
-    transition: color var(--transition);
   }
 
   nav a:hover {

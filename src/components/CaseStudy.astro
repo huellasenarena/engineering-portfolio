@@ -26,6 +26,7 @@ const backHref = lang === 'es' ? '/#projects' : '/en/#projects';
     <p class="cs__tagline">{cs.tagline}</p>
     <p class="cs__meta">{cs.meta}</p>
 
+    {(project.link || project.github) && (
     <div class="cs__actions">
       {project.link && (
         <a href={project.link} target="_blank" rel="noopener" class="cs__btn cs__btn--accent">{t('cs.viewLive')}</a>
@@ -37,6 +38,7 @@ const backHref = lang === 'es' ? '/#projects' : '/en/#projects';
         </a>
       )}
     </div>
+    )}
 
     {cs.metrics.length > 0 && (
       <div class="cs__metrics">
