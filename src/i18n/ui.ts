@@ -7,7 +7,7 @@ export const ui = {
     'nav.about': 'Sobre mí',
     'nav.contact': 'Contacto',
 
-    'hero.tagline': 'Construyo sistemas de IA, de la idea al deploy.',
+    'hero.tagline': 'Construyo, despliego y explico sistemas de IA full stack.',
     'hero.sub': 'Desarrollador full-stack · Especialista en IA',
     'hero.cta.github': 'GitHub',
     'hero.cta.contact': 'Contacto',
@@ -37,7 +37,7 @@ export const ui = {
     'nav.about': 'About',
     'nav.contact': 'Contact',
 
-    'hero.tagline': 'I build AI systems — from idea to deployment.',
+    'hero.tagline': 'I build, ship, and explain full-stack AI systems.',
     'hero.sub': 'Full-stack developer · AI specialist',
     'hero.cta.github': 'GitHub',
     'hero.cta.contact': 'Contact',
