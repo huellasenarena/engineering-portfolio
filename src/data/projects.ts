@@ -11,7 +11,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'vocab-app',
-    github: 'https://github.com/JNS99',
+    github: 'https://github.com/huellasenarena/vocab-app',
     es: {
       title: 'Vocab App',
       problem:
@@ -30,6 +30,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'europresse-reader',
+    github: 'https://github.com/huellasenarena/europresse-reader',
     es: {
       title: 'Europresse Reader',
       problem:
@@ -48,8 +49,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'que-mal-poema',
-    link: '#',
-    github: 'https://github.com/JNS99',
+    github: 'https://github.com/huellasenarena/qmp',
     es: {
       title: 'Qué Mal Poema',
       problem: 'Publicar poesía diaria sin infraestructura costosa ni CMS pesado.',

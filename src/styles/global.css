@@ -79,17 +79,34 @@ img {
   clip: rect(0 0 0 0);
 }
 
-/* Scroll reveal */
-[data-reveal] {
+/* Scroll reveal — only hide when JS is available to reveal it again */
+.js [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-[data-reveal].is-visible {
+.js [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Scrollbar */
