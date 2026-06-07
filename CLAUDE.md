@@ -79,7 +79,7 @@ Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem,
 |---|---|---|
 | Qué Mal Poema | `que-mal-poema` | ✅ Full case study. Live quemalpoema.com, repo `qmp` (public). Source: `~/Desktop/qmp/portfolio-case-study.md` |
 | Personalized News Reader / Noticias Personalizadas | `news-reader` | ✅ Full case study. Repo `europresse-reader` is **PRIVATE** → no code link shown; no public live URL (behind Google OAuth). Source: `~/Desktop/actualités/portfolio-case-study.md` |
-| Vocab App | `vocab-app` | ⏳ Short modal only — needs a full case study. Repo public. |
+| Vocab | `vocab-app` | ✅ Full case study. Live demo `huellasenarena.github.io/vocab-app`, repo `vocab-app` (public). Source: `~/Desktop/vocab-app/portfolio-case-study.md` |
 | ML en Vertex AI | `vertex-ml` | ⏳ Placeholder, `wip: true` ("Por definir") |
 
 > Note: "News Reader" and "Europresse Reader" are the **same project** — it was renamed. Don't re-add it as a separate card.
@@ -141,7 +141,6 @@ There were **two hosted zones** for the domain in Route 53. The A records were a
 
 ## Next steps / TODO
 
-- [ ] Write a full case study for **Vocab App** (give it a `caseStudy` → dedicated page, like the other two).
 - [ ] Fill in the **Vertex AI** project when ready (remove `wip`, add content).
 - [ ] Enable **LinkedIn** when the profile is reactivated.
 - [ ] Add **CV** PDFs (ES + EN) and flip `cvAvailable`.
