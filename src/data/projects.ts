@@ -37,22 +37,193 @@ export function projectUrl(slug: string, lang: 'es' | 'en'): string {
 export const projects: Project[] = [
   {
     slug: 'vocab-app',
+    link: 'https://huellasenarena.github.io/vocab-app',
     github: 'https://github.com/huellasenarena/vocab-app',
     es: {
-      title: 'Vocab App',
+      title: 'Vocab',
       problem:
-        'Aprender vocabulario en varios idiomas sin una herramienta que se adapte a tu ritmo de olvido real.',
+        'Acumular listas de palabras con flashcards es fácil; usarlas en situaciones reales, no. Y mantener esas listas a mano consume la atención que debería ir a practicar.',
       solution:
-        'App de repetición espaciada con el algoritmo SM-2 y generación de ejemplos contextuales con múltiples modelos de IA.',
+        'App que entrena el uso real de las palabras, no el reconocimiento. Subrayo una palabra en el móvil, ejecuto un atajo, y entra en mi lista. La practico escribiendo frases que una IA evalúa, con SM-2 y BYOK.',
     },
     en: {
-      title: 'Vocab App',
+      title: 'Vocab',
       problem:
-        'Learning vocabulary across multiple languages without a tool that adapts to your actual forgetting curve.',
+        'Building word lists with flashcards is easy; using words in real situations is not. Maintaining those lists by hand also eats the attention that should go to practice.',
       solution:
-        'Spaced repetition app with the SM-2 algorithm and multi-model AI for contextual example generation.',
+        'An app that trains real usage, not recognition. I underline a word on my phone, run a Shortcut, and it lands in my list. Then I practice by writing sentences that an AI evaluates, with SM-2 and BYOK.',
     },
-    stack: ['Python', 'SM-2', 'OpenAI', 'Anthropic', 'React'],
+    stack: ['Cloudflare Workers', 'Cloudflare D1', 'Google OAuth', 'OpenAI', 'iOS Shortcuts', 'JavaScript'],
+    caseStudy: {
+      es: {
+        tagline: 'Práctica de vocabulario centrada en el uso real.',
+        meta: 'Proyecto personal → producto · Febrero 2026 – presente',
+        metrics: [
+          { value: 8000, suffix: '+', label: 'palabras en biblioteca personal' },
+          { value: 4, label: 'modos de práctica con IA' },
+          { value: 25, label: 'llamadas de datos reescritas (Sheets→D1)' },
+        ],
+        overview: [
+          'Vocab es una app para aprender vocabulario practicando cómo se usan las palabras, no solo reconociéndolas. Cada palabra se practica escribiendo una frase propia que una IA evalúa —corrección lingüística + veredicto—, dentro de un sistema de repetición espaciada. La empecé en febrero de 2026 para preparar el examen DELE, y la uso a diario. Después la transformé de herramienta personal en un producto multiusuario completo.',
+        ],
+        problem: [
+          'Me preparaba para el DELE y había acumulado una lista enorme de palabras. Pero las flashcards no son la mejor forma de integrar vocabulario al uso activo: puedes ver una palabra, entender su definición y aun así no saber emplearla. Además, mantener listas a mano consume tiempo y atención —justo lo que te aleja de practicar.',
+          'Quería dos cosas: eliminar la fricción de añadir palabras, y practicar el uso real en lugar del reconocimiento pasivo.',
+        ],
+        solutionIntro:
+          'De la palabra subrayada a la práctica activa: el flujo es el corazón del proyecto.',
+        steps: [
+          'Subrayo una palabra en el móvil y ejecuto un atajo de iOS. No escribo nada ni indico el idioma: el servidor detecta el idioma, valida que la palabra existe y descarta duplicados y variantes (conjugaciones, plurales) con un embudo de similitud + juez LLM.',
+          'La app me propone la palabra y escribo una frase. Una IA evalúa si la usé bien y analiza gramática y registro, con sugerencias. El objetivo no es reconocer la palabra: es producirla en una situación real.',
+          'Cada palabra se reprograma según mi rendimiento con SM-2. Un calendario muestra qué toca revisar y cuándo. Modos de práctica: espaciada, situación (recall activo), libre e imagen (describir una foto con análisis por visión).',
+          'Para convertirlo en producto: autenticación propia en el edge (email/PBKDF2 + Google OAuth sin librería, verificación JWKS RS256 con Web Crypto), base de datos multi-tenant en Cloudflare D1, y BYOK — cada usuario usa su propia clave de IA, coste cero para el servidor.',
+        ],
+        architecture: `  📱 iPhone (palabra subrayada)        🌐 App de una página (Safari)
+        │  Shortcut → POST /add               │  login Google / email → JWT
+        │  (+ token personal)                 │
+        ▼                                     ▼
+                 ⚙️  Cloudflare Worker (edge)
+                 auth JWT · BYOK · ruta /add
+                          │
+          ┌───────────────┼────────────────────┐
+          ▼               ▼                     ▼
+  🤖 OpenAI         🤖 OpenAI / Gemini    🗄️ Cloudflare D1
+  detección idioma  evaluación de frase   (SQLite edge)
+  + duplicados      (clave del usuario,   datos por user_id:
+  (gpt-4.1-mini)     BYOK)                palabras · progreso · etc.
+
+  >> Subrayar una palabra y tocar un atajo: eso es todo el "trabajo".
+     La práctica entrena el USO, no el reconocimiento.`,
+        stack: [
+          { layer: 'Frontend', tech: 'JavaScript vanilla, un solo index.html, HTML/CSS, mobile-first (Safari/PWA)' },
+          { layer: 'Hosting frontend', tech: 'GitHub Pages (deploy vía GitHub Actions)' },
+          { layer: 'Backend / proxy', tech: 'Cloudflare Worker (edge)' },
+          { layer: 'Base de datos', tech: 'Cloudflare D1 (SQLite en el edge), multi-tenant por user_id' },
+          { layer: 'Autenticación', tech: 'Email + PBKDF2 (Web Crypto) · Google OAuth (ID token, JWKS RS256) · sesiones JWT (HS256)' },
+          { layer: 'IA (práctica)', tech: 'BYOK — OpenAI (GPT) y Google (Gemma/Gemini), streaming, abstracción multi-proveedor' },
+          { layer: 'IA (captura)', tech: 'gpt-4.1-mini server-side: detección de idioma, validez y similitud' },
+          { layer: 'Captura móvil', tech: 'iOS Shortcuts → POST /add con token personal' },
+        ],
+        challenges: [
+          {
+            title: 'Autenticación desde cero en el edge',
+            body: 'PBKDF2 para contraseñas y verificación del ID token de Google por JWKS (RS256) dentro del Worker con Web Crypto, sin librerías. Vinculación de cuentas por email: un mismo email = una sola cuenta, ya entres con Google o con contraseña.',
+          },
+          {
+            title: 'Migración Sheets → D1 sin perder el frontend de una página',
+            body: 'Normalicé los datos a tablas relacionales por user_id y reescribí ~25 llamadas de acceso a datos, manteniendo la app en un único archivo.',
+          },
+          {
+            title: 'BYOK con sincronización entre dispositivos',
+            body: 'La clave viaja por cabecera en cada petición de IA y nunca se almacena del lado servidor por defecto. Opción de sincronizarla (cifrada en reposo) entre los dispositivos del usuario vía D1.',
+          },
+          {
+            title: 'Captura sin fricción con inteligencia server-side',
+            body: 'La ruta /add reproduce un embudo de validación —idioma + sentido + similitud (puntuación normalizada + juez LLM)— leyendo el vocabulario existente desde D1, y responde en el formato que el atajo de iOS ya entiende.',
+          },
+          {
+            title: 'Evaluación de frases por IA',
+            body: 'Veredicto estructurado + análisis lingüístico en streaming, con manejo de presupuestos de tokens de modelos de razonamiento y reglas anti-alucinación en los prompts.',
+          },
+          {
+            title: 'Repetición espaciada (SM-2)',
+            body: 'Reprogramación por palabra, límite diario de palabras nuevas y cambio de día según la hora local del usuario.',
+          },
+        ],
+        results: [
+          'Uso diario desde febrero de 2026 para preparar el DELE; biblioteca personal de 8000+ palabras.',
+          'Práctica del uso, no del reconocimiento: escribo frases reales y recibo corrección inmediata.',
+          'Fricción de captura casi nula: subrayar + un atajo, sin escribir ni indicar idioma.',
+          'De herramienta a producto en pocos días: auth (Google + email), datos por usuario, BYOK y despliegue en producción, con coste de IA cero del lado servidor.',
+        ],
+        demonstrates:
+          'Construí solo un sistema full-stack de extremo a extremo —captura móvil, frontend, autenticación, base de datos en el edge e integración de varias APIs de IA— y, sobre todo, transformé una necesidad personal real en un producto usable por otros. Nació de aprender un idioma: la tecnología está al servicio de la práctica, automatizando lo aburrido para proteger lo que importa, usar las palabras.',
+      },
+      en: {
+        tagline: 'Vocabulary practice focused on real usage.',
+        meta: 'Personal project → product · February 2026 – present',
+        metrics: [
+          { value: 8000, suffix: '+', label: 'words in personal library' },
+          { value: 4, label: 'AI practice modes' },
+          { value: 25, label: 'data calls rewritten (Sheets→D1)' },
+        ],
+        overview: [
+          'Vocab is an app for learning vocabulary by practicing how words are used, not just recognizing them. Each word is practiced by writing your own sentence that an AI evaluates —linguistic analysis + verdict—, inside a spaced-repetition system. I started it in February 2026 to prepare for the DELE Spanish exam, and I use it daily. I then turned it from a personal tool into a full multi-user product.',
+        ],
+        problem: [
+          'I was preparing for the DELE and had built up a huge list of words. But flashcards aren\'t the best way to move vocabulary into active use: you can see a word, understand its definition, and still not know how to use it. On top of that, maintaining lists by hand costs time and attention — exactly what pulls you away from practicing.',
+          'I wanted two things: to remove the friction of adding words, and to practice real usage instead of passive recognition.',
+        ],
+        solutionIntro:
+          'From an underlined word to active practice: the workflow is the heart of the project.',
+        steps: [
+          'I underline a word on my phone and run an iOS Shortcut. I type nothing and don\'t specify the language: the server detects the language, validates that the word is real, and discards duplicates and variants (conjugations, plurals) via a similarity funnel + LLM judge.',
+          'The app shows me the word and I write a sentence. An AI judges whether I used it correctly and analyzes grammar and register, with suggestions. The goal isn\'t to recognize the word — it\'s to produce it in a real situation.',
+          'Each word is rescheduled based on my performance with SM-2. A calendar shows what\'s due and when. Practice modes: spaced, situation (active recall), free, and image (describe a photo with vision analysis).',
+          'To turn it into a product: custom auth at the edge (email/PBKDF2 + Google OAuth without a library, JWKS RS256 verification with Web Crypto), a multi-tenant database on Cloudflare D1, and BYOK — each user brings their own AI key, zero server cost.',
+        ],
+        architecture: `  📱 iPhone (underlined word)           🌐 Single-page app (Safari)
+        │  Shortcut → POST /add               │  Google / email login → JWT
+        │  (+ personal token)                 │
+        ▼                                     ▼
+                 ⚙️  Cloudflare Worker (edge)
+                 JWT auth · BYOK · /add route
+                          │
+          ┌───────────────┼────────────────────┐
+          ▼               ▼                     ▼
+  🤖 OpenAI         🤖 OpenAI / Gemini    🗄️ Cloudflare D1
+  language detect   sentence evaluation  (edge SQLite)
+  + duplicates      (user's own key,     data by user_id:
+  (gpt-4.1-mini)     BYOK)               words · progress · etc.
+
+  >> Underline a word and tap a Shortcut: that's all the "work."
+     Practice trains USAGE, not recognition.`,
+        stack: [
+          { layer: 'Frontend', tech: 'Vanilla JavaScript, a single index.html, HTML/CSS, mobile-first (Safari/PWA)' },
+          { layer: 'Frontend hosting', tech: 'GitHub Pages (deployed via GitHub Actions)' },
+          { layer: 'Backend / proxy', tech: 'Cloudflare Worker (edge)' },
+          { layer: 'Database', tech: 'Cloudflare D1 (edge SQLite), multi-tenant by user_id' },
+          { layer: 'Authentication', tech: 'Email + PBKDF2 (Web Crypto) · Google OAuth (ID token, JWKS RS256) · JWT sessions (HS256)' },
+          { layer: 'AI (practice)', tech: 'BYOK — OpenAI (GPT) and Google (Gemma/Gemini), streaming, multi-provider abstraction' },
+          { layer: 'AI (capture)', tech: 'gpt-4.1-mini server-side: language detection, validity, similarity' },
+          { layer: 'Mobile capture', tech: 'iOS Shortcuts → POST /add with a personal token' },
+        ],
+        challenges: [
+          {
+            title: 'Auth from scratch at the edge',
+            body: 'PBKDF2 password hashing and Google ID-token verification via JWKS (RS256) inside the Worker with Web Crypto, no libraries. Account linking by email: same email = one account whether you sign in with Google or password.',
+          },
+          {
+            title: 'Sheets → D1 migration without losing the single-page frontend',
+            body: 'Normalized data into relational tables keyed by user_id and rewrote ~25 data-access calls, keeping the app as one file.',
+          },
+          {
+            title: 'BYOK with cross-device sync',
+            body: 'The key travels in a header on each AI request and is never stored server-side by default. An opt-in syncs it (encrypted at rest) across the user\'s devices via D1.',
+          },
+          {
+            title: 'Frictionless capture with server-side intelligence',
+            body: 'The /add route reproduces a validation funnel — language + sense + similarity (normalized scoring + LLM judge) — reading existing vocabulary from D1, and answers in the exact format the iOS Shortcut already understands.',
+          },
+          {
+            title: 'AI sentence evaluation',
+            body: 'Structured verdict + linguistic analysis, streamed, handling reasoning-model token budgets and anti-hallucination rules in the prompts.',
+          },
+          {
+            title: 'Spaced repetition (SM-2)',
+            body: 'Per-word rescheduling, a daily new-word cap, and day boundaries based on the user\'s local time.',
+          },
+        ],
+        results: [
+          'Daily use since February 2026 to prepare for the DELE; a personal library of 8,000+ words.',
+          'Practicing usage, not recognition: I write real sentences and get immediate correction.',
+          'Near-zero capture friction: underline + one Shortcut, no typing, no language tagging.',
+          'Tool to product in a few days: auth (Google + email), per-user data, BYOK, and production deployment — with zero server-side AI cost.',
+        ],
+        demonstrates:
+          'I built a complete end-to-end full-stack system alone — mobile capture, frontend, authentication, an edge database, and integration of several AI APIs — and, above all, turned a real personal need into a product others can use. It grew out of learning a language: technology serves the practice, automating the boring part to protect what matters — actually using the words.',
+      },
+    },
   },
   {
     slug: 'news-reader',
