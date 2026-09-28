@@ -1,0 +1,102 @@
+/* base.css — copiado de ~/Desktop/estilo. No editar aquí: editar allí y ejecutar sync.sh
+   Requiere tokens.css. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--serif);
+  line-height: var(--interlineado);
+}
+
+h1 { font-size: var(--t-h1); font-weight: normal; line-height: 1.3; text-wrap: balance; }
+h2 { font-size: var(--t-h2); font-weight: normal; line-height: 1.35; text-wrap: balance; }
+strong, b { font-weight: 600; }
+
+/* Enlaces: subrayado de tinta con borde, no text-decoration */
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--tinta);
+}
+
+/* Nav: subrayado solo en el activo y al pasar el cursor */
+nav a { border-bottom-color: transparent; }
+nav a:hover,
+nav a.active,
+nav a[aria-current="page"] { border-bottom-color: var(--tinta); }
+
+/* Pastillas: solo para acciones */
+button,
+.btn {
+  display: inline-block;
+  padding: 4px 14px;
+  font-family: inherit;
+  font-size: var(--t-boton);
+  color: #444;
+  background: var(--relleno);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  cursor: pointer;
+}
+button:hover:not(:disabled),
+.btn:hover { background: var(--relleno-hover); border-color: var(--linea-fuerte); color: var(--tinta); }
+button:disabled { opacity: 0.55; cursor: default; }
+button[aria-pressed="true"],
+.btn.active { background: var(--tinta); border-color: var(--tinta); color: var(--papel); }
+
+/* Campos: rectángulos con borde de tinta */
+input, select {
+  font-family: inherit;
+  font-size: var(--t-nav);
+  padding: 6px 8px;
+  color: var(--tinta);
+  background: var(--papel);
+  border: 1px solid var(--tinta);
+  border-radius: 0;
+}
+textarea {
+  font-family: inherit;
+  font-size: var(--t-texto);
+  line-height: 1.6;
+  color: var(--tinta);
+  background: #fff;
+  border: 1px solid var(--linea);
+  border-radius: 2px;
+  padding: 12px 14px;
+}
+textarea:focus { outline: none; border-color: #bbb; }
+
+/* Foco visible para teclado */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 1px solid var(--tinta);
+  outline-offset: 2px;
+}
+
+/* Código y lo técnico */
+code, pre, kbd { font-family: var(--mono); font-size: 0.85em; }
+
+/* Citas y poemas: línea a la izquierda */
+blockquote {
+  margin: 24px 0;
+  padding-left: 16px;
+  border-left: 1px solid var(--linea-fuerte);
+  color: #444;
+}
+
+/* Separadores */
+hr { border: 0; border-top: 1px solid var(--linea-suave); margin: 40px 0; }
+
+/* Etiqueta pequeña en mayúsculas */
+.etiqueta {
+  font-size: var(--t-etiqueta);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}

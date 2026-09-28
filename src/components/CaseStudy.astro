@@ -15,381 +15,268 @@ const content = project[lang];
 const backHref = lang === 'es' ? '/#projects' : '/en/#projects';
 ---
 
-<article class="cs">
-  <a href={backHref} class="cs__back">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    {t('cs.back')}
-  </a>
+<article class="cs container">
+  <a href={backHref} class="volver">← {t('cs.back')}</a>
 
   <header class="cs__header">
-    <h1 class="cs__title">{content.title}</h1>
-    <p class="cs__tagline">{cs.tagline}</p>
-    <p class="cs__meta">{cs.meta}</p>
-
-    {(project.link || project.github) && (
-    <div class="cs__actions">
-      {project.link && (
-        <a href={project.link} target="_blank" rel="noopener" class="cs__btn cs__btn--accent">{t('cs.viewLive')}</a>
-      )}
-      {project.github && (
-        <a href={project.github} target="_blank" rel="noopener" class="cs__btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          {t('cs.viewCode')}
-        </a>
-      )}
-    </div>
-    )}
+    <h1>{content.title}</h1>
+    <p class="tagline">{cs.tagline}</p>
+    <p class="meta">
+      {cs.meta}
+      {project.link && <> · <a href={project.link} target="_blank" rel="noopener">{t('cs.viewLive')}</a></>}
+      {project.github && <> · <a href={project.github} target="_blank" rel="noopener">{t('cs.viewCode')}</a></>}
+    </p>
 
     {cs.metrics.length > 0 && (
-      <div class="cs__metrics">
+      <div class="cols">
         {cs.metrics.map((m) => (
-          <div class="metric">
-            <span class="metric__value" data-count={m.value} data-suffix={m.suffix ?? ''}>0</span>
-            <span class="metric__label">{m.label}</span>
+          <div class="col">
+            <div class="col-num">{m.value}{m.suffix ?? ''}</div>
+            <div class="col-lab">{m.label}</div>
           </div>
         ))}
       </div>
     )}
   </header>
 
-  <section class="cs__section" data-reveal>
+  <section class="texto">
     <h2>{t('cs.overview')}</h2>
-    {cs.overview.map((p) => <p>{p}</p>)}
+    {cs.overview.map((p, i) => <p class:list={{ lead: i === 0 }}>{p}</p>)}
   </section>
 
-  <section class="cs__section" data-reveal>
+  <section class="texto">
     <h2>{t('cs.problem')}</h2>
     {cs.problem.map((p) => <p>{p}</p>)}
   </section>
 
-  <section class="cs__section" data-reveal>
+  <section class="texto">
     <h2>{t('cs.solution')}</h2>
     <p>{cs.solutionIntro}</p>
-    <ol class="cs__steps">
+    <ol class="pasos">
       {cs.steps.map((step) => <li>{step}</li>)}
     </ol>
   </section>
 
   {cs.architecture && (
-    <section class="cs__section" data-reveal>
+    <section>
       <h2>{t('cs.architecture')}</h2>
-      <pre class="cs__diagram">{cs.architecture}</pre>
-      <p class="cs__diagram-note">{t('cs.diagramNote')}</p>
+      <div class="diagrama"><pre>{cs.architecture}</pre></div>
+      <p class="nota">{t('cs.diagramNote')}</p>
     </section>
   )}
 
-  <section class="cs__section" data-reveal>
+  <section class="texto">
     <h2>{t('cs.stack')}</h2>
-    <table class="cs__table">
-      <thead>
-        <tr><th>{t('cs.stack.layer')}</th><th>{t('cs.stack.tech')}</th></tr>
-      </thead>
-      <tbody>
-        {cs.stack.map((row) => (
-          <tr><td>{row.layer}</td><td>{row.tech}</td></tr>
-        ))}
-      </tbody>
-    </table>
-  </section>
-
-  <section class="cs__section" data-reveal>
-    <h2>{t('cs.challenges')}</h2>
-    <div class="cs__challenges">
-      {cs.challenges.map((c) => (
-        <div class="challenge">
-          <h3>{c.title}</h3>
-          <p>{c.body}</p>
-        </div>
-      ))}
+    <div class="tabla-wrap">
+      <table class="stack">
+        <thead>
+          <tr><th class="etiqueta">{t('cs.stack.layer')}</th><th class="etiqueta">{t('cs.stack.tech')}</th></tr>
+        </thead>
+        <tbody>
+          {cs.stack.map((row) => (
+            <tr><td>{row.layer}</td><td>{row.tech}</td></tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </section>
 
-  <section class="cs__section" data-reveal>
+  <section class="texto">
+    <h2>{t('cs.challenges')}</h2>
+    {cs.challenges.map((c) => (
+      <div class="reto">
+        <h3>{c.title}</h3>
+        <p>{c.body}</p>
+      </div>
+    ))}
+  </section>
+
+  <section class="texto">
     <h2>{t('cs.results')}</h2>
-    <ul class="cs__results">
+    <ul class="resultados">
       {cs.results.map((r) => <li>{r}</li>)}
     </ul>
   </section>
 
-  <section class="cs__section cs__demonstrates" data-reveal>
+  <section class="texto">
     <h2>{t('cs.demonstrates')}</h2>
-    <p>{cs.demonstrates}</p>
+    <blockquote class="cierre">{cs.demonstrates}</blockquote>
   </section>
 </article>
 
 <style>
   .cs {
-    max-width: var(--container-narrow);
-    margin: 0 auto;
-    padding: 8rem 1.5rem 6rem;
+    margin-top: 48px;
+    padding-bottom: 80px;
   }
 
-  .cs__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
+  .volver {
+    font-size: var(--t-nav);
+  }
+
+  .cs__header {
+    margin-top: 36px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+  }
+
+  .tagline {
+    font-style: italic;
+    color: var(--gris);
+    margin: 0 0 4px;
+  }
+
+  .meta {
     font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    margin-bottom: 3rem;
-    transition: color var(--transition), gap var(--transition);
-  }
-  .cs__back:hover { color: var(--accent); gap: 0.7rem; }
-
-  .cs__header { margin-bottom: 4rem; }
-
-  .cs__title {
-    font-family: var(--font-serif);
-    font-size: clamp(2.2rem, 5vw, 3.25rem);
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    margin-bottom: 1rem;
+    color: var(--gris);
+    margin: 0 0 32px;
   }
 
-  .cs__tagline {
-    font-size: clamp(1.05rem, 2vw, 1.3rem);
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .cs__meta {
-    font-size: 0.85rem;
-    color: var(--text-subtle);
-    letter-spacing: 0.02em;
-    margin-bottom: 2rem;
-  }
-
-  .cs__actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
-  }
-
-  .cs__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.3rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: border-color var(--transition), color var(--transition),
-                background-color var(--transition), transform var(--transition);
-  }
-  .cs__btn:hover { border-color: var(--accent); color: var(--text); }
-  .cs__btn:active { transform: scale(0.97); }
-  .cs__btn--accent {
-    background: var(--accent);
-    border-color: transparent;
-    color: var(--bg);
-    font-weight: 600;
-  }
-  .cs__btn--accent:hover { background: var(--accent-hover); color: var(--bg); }
-
-  .cs__metrics {
+  /* Métricas: tres columnas con líneas finas, números fijos */
+  .cols {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    padding: 1.75rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: calc(var(--radius) * 1.5);
+    max-width: 600px;
+    border-top: 1px solid var(--linea-suave);
+    padding-top: 18px;
+    margin-bottom: 8px;
   }
-  @media (max-width: 520px) { .cs__metrics { grid-template-columns: 1fr; gap: 1.5rem; } }
-
-  .metric { display: flex; flex-direction: column; gap: 0.3rem; }
-  .metric__value {
-    font-family: var(--font-serif);
-    font-size: clamp(2rem, 5vw, 2.75rem);
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
+  .col {
+    text-align: center;
+    padding: 0 6px;
+    border-left: 1px solid var(--linea-suave);
   }
-  .metric__label {
+  .col:first-child { border-left: 0; }
+  .col-num {
+    font-size: 2.2rem;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+  }
+  .col-lab {
     font-size: 0.8rem;
-    color: var(--text-muted);
-    letter-spacing: 0.02em;
+    line-height: 1.4;
+    color: var(--gris);
+    margin-top: 4px;
   }
 
-  .cs__section { margin-bottom: 3.5rem; }
+  section { margin-top: 44px; }
 
-  .cs__section h2 {
-    font-family: var(--font-serif);
-    font-size: clamp(1.4rem, 3vw, 1.85rem);
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid var(--border);
+  h2 { margin: 0 0 14px; }
+
+  section p {
+    font-size: 0.97rem;
+    line-height: 1.7;
+    margin: 0 0 18px;
   }
 
-  .cs__section p {
-    color: var(--text-muted);
-    line-height: 1.75;
-    margin-bottom: 1rem;
+  /* Letra capital, como en Análisis du jour */
+  p.lead::first-letter {
+    float: left;
+    font-size: 3.2rem;
+    line-height: 0.9;
+    margin: 2px 6px 0 0;
   }
 
-  .cs__steps {
+  .pasos {
     list-style: none;
-    counter-reset: step;
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    counter-reset: paso;
+    margin: 0;
+    padding: 0;
   }
-  .cs__steps li {
-    counter-increment: step;
-    position: relative;
-    padding-left: 3rem;
-    color: var(--text-muted);
-    line-height: 1.65;
+  .pasos li {
+    counter-increment: paso;
+    display: grid;
+    grid-template-columns: 2em 1fr;
+    margin-bottom: 14px;
+    font-size: 0.97rem;
+    line-height: 1.7;
   }
-  .cs__steps li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: -0.1rem;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    font-family: var(--font-serif);
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--accent);
+  .pasos li::before {
+    content: counter(paso) ".";
+    color: var(--gris);
   }
 
-  .cs__diagram {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.5rem;
+  .diagrama {
     overflow-x: auto;
-    font-family: 'SF Mono', ui-monospace, Menlo, monospace;
-    font-size: 0.78rem;
-    line-height: 1.5;
-    color: var(--text);
-    white-space: pre;
+    border-left: 1px solid var(--linea-fuerte);
+    padding: 4px 0 4px 18px;
   }
-  .cs__diagram-note {
-    font-size: 0.85rem !important;
+  .diagrama pre {
+    margin: 0;
+    font-size: 0.74rem;
+    line-height: 1.55;
+    color: #333;
+  }
+  .nota {
+    font-size: var(--t-pequeno) !important;
     font-style: italic;
-    color: var(--text-subtle) !important;
-    margin-top: 0.75rem;
+    color: var(--gris);
+    margin-top: 12px !important;
   }
 
-  .cs__table {
+  .tabla-wrap { overflow-x: auto; }
+  .stack {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
   }
-  .cs__table th {
+  .stack th {
     text-align: left;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    padding: 0.6rem 0.75rem;
-    border-bottom: 1px solid var(--border);
+    font-weight: normal;
+    padding: 0 0 8px;
   }
-  .cs__table td {
-    padding: 0.7rem 0.75rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-muted);
+  .stack td {
+    padding: 8px 0;
+    border-top: 1px solid var(--linea-suave);
     vertical-align: top;
   }
-  .cs__table td:first-child { color: var(--text); font-weight: 500; white-space: nowrap; }
-  @media (max-width: 520px) {
-    .cs__table td:first-child { white-space: normal; }
+  .stack td:first-child {
+    color: var(--gris);
+    width: 34%;
+    padding-right: 16px;
+  }
+  .stack td:last-child {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
   }
 
-  .cs__challenges {
-    display: grid;
-    gap: 1rem;
+  .reto { margin-bottom: 18px; }
+  .reto h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 2px;
   }
-  .challenge {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
+  .reto p {
+    font-size: var(--t-texto);
+    color: #333;
+    margin: 0;
   }
-  .challenge h3 {
-    font-size: 0.95rem;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-  .challenge p { font-size: 0.875rem; margin-bottom: 0; }
 
-  .cs__results {
+  .resultados {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
   }
-  .cs__results li {
-    position: relative;
-    padding-left: 1.75rem;
-    color: var(--text-muted);
+  .resultados li {
+    padding: 8px 0;
+    border-top: 1px solid var(--linea-suave);
+    font-size: 0.97rem;
     line-height: 1.65;
   }
-  .cs__results li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6rem;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
+
+  .cierre {
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
   }
 
-  .cs__demonstrates p {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    line-height: 1.7;
-    color: var(--text);
-    font-style: italic;
-    padding-left: 1.5rem;
-    border-left: 2px solid var(--accent);
+  @media (max-width: 600px) {
+    .col-num { font-size: 1.7rem; }
+    .col-lab { font-size: 0.72rem; }
+    p.lead::first-letter { font-size: 2.6rem; margin-top: 1px; }
   }
 </style>
-
-<script>
-  function animateCount(el: HTMLElement) {
-    const target = Number(el.dataset.count || '0');
-    const suffix = el.dataset.suffix || '';
-    const duration = 1400;
-    const start = performance.now();
-    function tick(now: number) {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target).toString() + suffix;
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
-
-  if (reduce) {
-    counters.forEach((el) => {
-      el.textContent = (el.dataset.count || '0') + (el.dataset.suffix || '');
-    });
-  } else {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          animateCount(e.target as HTMLElement);
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach((el) => obs.observe(el));
-  }
-</script>

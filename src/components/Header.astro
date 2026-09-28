@@ -10,135 +10,60 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const alternateLang = lang === 'es' ? 'en' : 'es';
 const alternateUrl = altUrl ?? getAlternateUrl(Astro.url, alternateLang);
-const alternateLabel = alternateLang.toUpperCase();
 
-const projectsHref = lang === 'es' ? '/#projects' : '/en/#projects';
-const aboutHref = lang === 'es' ? '/#about' : '/en/#about';
-const contactHref = lang === 'es' ? '/#contact' : '/en/#contact';
+const homeHref = lang === 'es' ? '/' : '/en/';
+const projectsHref = `${homeHref}#projects`;
+const aboutHref = `${homeHref}#about`;
+const contactHref = `${homeHref}#contact`;
 ---
 
-<header>
-  <div class="container">
-    <a href={lang === 'es' ? '/' : '/en/'} class="logo" data-scroll-top>Jack Stefanou</a>
-    <nav>
+<header class="container">
+  <nav>
+    <div class="nav-left">
+      <a href={homeHref} class="nombre">Jack Stefanou</a>
       <a href={projectsHref}>{t('nav.projects')}</a>
       <a href={aboutHref}>{t('nav.about')}</a>
       <a href={contactHref}>{t('nav.contact')}</a>
-      <a href={alternateUrl} class="lang-toggle" aria-label={`Switch to ${alternateLang}`}>
-        {alternateLabel}
+    </div>
+    <span class="lang">
+      <span aria-current="true">{lang.toUpperCase()}</span>
+      /
+      <a href={alternateUrl} hreflang={alternateLang} aria-label={alternateLang === 'en' ? 'English' : 'Español'}>
+        {alternateLang.toUpperCase()}
       </a>
-    </nav>
-  </div>
+    </span>
+  </nav>
 </header>
 
 <style>
   header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 1.25rem 0;
-    background: rgba(15, 14, 13, 0);
-    border-bottom: 1px solid transparent;
-    /* blur starts at 0 so it can interpolate smoothly to the scrolled state */
-    backdrop-filter: blur(0px) saturate(1);
-    -webkit-backdrop-filter: blur(0px) saturate(1);
-    transition: background 0.55s var(--ease), backdrop-filter 0.55s var(--ease),
-                -webkit-backdrop-filter 0.55s var(--ease), border-color 0.55s var(--ease);
-  }
-
-  /* Keep nav legible over the photo while the bar is transparent */
-  .logo,
-  nav a {
-    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-    transition: color var(--transition), text-shadow 0.55s var(--ease);
-  }
-  header.scrolled .logo,
-  header.scrolled nav a {
-    text-shadow: 0 1px 12px rgba(0, 0, 0, 0);
-  }
-
-  header.scrolled {
-    background: rgba(15, 14, 13, 0.82);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    border-bottom-color: var(--border);
-  }
-
-  .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .logo {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    letter-spacing: 0.01em;
-    color: var(--text);
-  }
-
-  .logo:hover {
-    color: var(--accent);
+    margin-top: 40px;
   }
 
   nav {
     display: flex;
-    align-items: center;
-    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 24px;
+    font-size: var(--t-nav);
   }
 
-  nav a {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-muted);
-    letter-spacing: 0.02em;
+  .nav-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
   }
 
-  nav a:hover {
-    color: var(--text);
+  .nombre {
+    margin-right: 12px;
   }
 
-  .lang-toggle {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    padding: 0.25rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text-muted) !important;
-    transition: border-color var(--transition), color var(--transition) !important;
+  .lang {
+    margin-left: auto;
+    color: var(--gris);
   }
 
-  .lang-toggle:hover {
-    border-color: var(--accent);
-    color: var(--accent) !important;
-  }
-
-  @media (max-width: 640px) {
-    nav {
-      gap: 1.25rem;
-    }
-    nav a:not(.lang-toggle) {
-      display: none;
-    }
+  .lang [aria-current] {
+    color: var(--tinta);
   }
 </style>
-
-<script>
-  const header = document.querySelector('header');
-  window.addEventListener('scroll', () => {
-    header?.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
-
-  const logo = document.querySelector<HTMLAnchorElement>('[data-scroll-top]');
-  logo?.addEventListener('click', (e) => {
-    const target = new URL(logo.href).pathname;
-    // Only smooth-scroll when already on the page the logo points to
-    if (window.location.pathname === target && window.scrollY > 0) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  });
-</script>

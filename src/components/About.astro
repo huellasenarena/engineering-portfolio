@@ -19,73 +19,41 @@ const languages = lang === 'es'
     ];
 ---
 
-<section id="about" data-reveal>
-  <div class="container container--narrow">
-    <h2 class="section-title">{t('about.title')}</h2>
-    <p class="body-text">{t('about.body')}</p>
+<section id="about" class="container seccion">
+  <h2 class="titulo-seccion">{t('about.title')}</h2>
+  <p class="texto cuerpo">{t('about.body')}</p>
 
-    <div class="languages">
-      {languages.map(({ name, level }) => (
-        <div class="lang-item">
-          <span class="lang-name">{name}</span>
-          <span class="lang-level">{level}</span>
-        </div>
-      ))}
-    </div>
-  </div>
+  <ul class="idiomas">
+    {languages.map(({ name, level }) => (
+      <li><span>{name}</span><span class="nivel">{level}</span></li>
+    ))}
+  </ul>
 </section>
 
 <style>
-  .section-title {
-    font-family: var(--font-serif);
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    color: var(--text);
-    margin-bottom: 2rem;
+  .cuerpo {
+    font-size: 0.97rem;
+    line-height: 1.7;
+    margin: 0 0 28px;
   }
 
-  .body-text {
-    font-size: 1.05rem;
-    color: var(--text-muted);
-    line-height: 1.75;
-    margin-bottom: 2.5rem;
+  .idiomas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 420px;
+    font-size: var(--t-texto);
   }
 
-  .languages {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 480px) {
-    .languages {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  .lang-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.875rem 1rem;
+  .idiomas li {
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    transition: border-color var(--transition);
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+    border-top: 1px solid var(--linea-suave);
   }
 
-  .lang-item:hover {
-    border-color: var(--accent);
-  }
-
-  .lang-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .lang-level {
-    font-size: 0.8rem;
-    color: var(--accent);
-    font-weight: 500;
+  .nivel {
+    color: var(--gris);
   }
 </style>

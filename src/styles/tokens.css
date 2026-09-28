@@ -1,0 +1,35 @@
+/* tokens.css — copiado de ~/Desktop/estilo. No editar aquí: editar allí y ejecutar sync.sh */
+
+:root {
+  color-scheme: light;
+
+  /* Color: papel y tinta, sin acento */
+  --papel: #fafafa;
+  --tinta: #222;
+  --gris: #555;
+  --gris-claro: #999;
+  --linea-fuerte: #ccc;
+  --linea: #ddd;
+  --linea-suave: #eee;
+  --relleno: #f2f2f2;
+  --relleno-hover: #e8e8e8;
+
+  /* Tipografía: Georgia para todo, mono solo para lo técnico */
+  --serif: Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --t-h1: 1.6rem;
+  --t-h2: 1.2rem;
+  --t-texto: 0.95rem;
+  --t-nav: 0.9rem;
+  --t-pequeno: 0.82rem;
+  --t-boton: 0.8rem;
+  --t-etiqueta: 0.68rem;
+
+  --interlineado: 1.65;
+
+  /* Composición */
+  --ancho: 900px;
+  --ancho-texto: 620px;
+  --margen: 20px;
+}

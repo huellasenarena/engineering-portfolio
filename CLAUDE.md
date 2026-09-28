@@ -15,7 +15,8 @@ Bogotá, Colombia (nearshoring market). Reads as **an engineer who builds**, not
 
 - **Astro** (static output, zero JS by default) + **vanilla CSS** (scoped per component). No CSS framework, no build-heavy tooling.
 - **i18n:** built-in Astro i18n. Spanish default at `/`, English at `/en/`. Language toggle in header.
-- **Fonts:** Playfair Display (serif, headings) + Inter (sans, body), loaded from Google Fonts.
+- **Fonts:** Georgia (system) for everything + system mono for technical bits. No web fonts.
+- **Styles:** `src/styles/tokens.css` + `base.css` are COPIES from `~/Desktop/estilo` (run `~/Desktop/estilo/sync.sh src/styles`; don't edit them here). Portfolio-only rules go in `global.css` or component `<style>`.
 - **Hosting:** GitHub Pages via GitHub Actions. **Node 22 required** (Astro needs >=22.12; CI uses 22 — do not drop to 20, it fails the build).
 
 ```bash
@@ -38,14 +39,14 @@ src/
 ├── data/
 │   └── projects.ts      # Project[] data + CaseStudyContent model + projectUrl() helper
 ├── layouts/
-│   └── Layout.astro     # <head>: SEO, Open Graph, canonical, hreflang, favicons, JS-ready flag, scroll-reveal observer
+│   └── Layout.astro     # <head>: SEO, Open Graph, canonical, hreflang, favicons
 ├── components/
-│   ├── Header.astro     # fixed header, nav, language toggle, scroll-to-top logo
-│   ├── Hero.astro       # tagline + CTAs + background photo SLIDESHOW + parallax
-│   ├── Projects.astro   # grid of ProjectCard
-│   ├── ProjectCard.astro# card; links to case-study page OR opens a modal; cursor spotlight
+│   ├── Header.astro     # static text nav (QMP-style), ES / EN at the right
+│   ├── Hero.astro       # tagline + links + full-width photo SLIDESHOW below
+│   ├── Projects.astro   # list (<ul>) of ProjectCard
+│   ├── ProjectCard.astro# list item: title link (case study / live site) + one line + stack in mono
 │   ├── CaseStudy.astro  # full case-study renderer (used by the dedicated pages)
-│   ├── About.astro      # short bio + languages (2×2)
+│   ├── About.astro      # short bio + languages (list with thin lines)
 │   └── Contact.astro    # LinkedIn / GitHub / CV links (some disabled placeholders)
 └── pages/
     ├── index.astro              # ES home
@@ -69,10 +70,9 @@ public/
 ### Adding / editing a project
 Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem, solution), a `stack` array, optional `link` (live demo), optional `github`, and optional `caseStudy`.
 
-- **Project WITHOUT `caseStudy`** → card opens a modal with the short problem/solution (e.g. Vocab App).
-- **Project WITH `caseStudy`** → card links to a dedicated page at `/proyectos/<slug>` (ES) and `/en/projects/<slug>` (EN). The page renders `CaseStudy.astro`: tagline, meta, animated metrics, overview, problem, numbered solution steps, optional ASCII architecture diagram, stack table, challenges, results, and a closing statement.
-- **`wip: true`** → greyed-out "in progress" card (e.g. the Vertex AI placeholder).
-- Each project needs an icon entry in the `icons` map in `ProjectCard.astro`, keyed by `slug`. If the slug changes, update that key too.
+- **Project WITHOUT `caseStudy`** → title links to `link` (live site) if present, otherwise plain text.
+- **Project WITH `caseStudy`** → card links to a dedicated page at `/proyectos/<slug>` (ES) and `/en/projects/<slug>` (EN). The page renders `CaseStudy.astro`: tagline, meta (+ site/code links), fixed metrics in 3 columns, overview, problem, numbered solution steps, optional ASCII architecture diagram, stack table, challenges, results, and a closing statement.
+- **`wip: true`** → greyed-out "in progress" list item (e.g. the Vertex AI placeholder).
 
 ### Current project status
 | Project | Slug | Status |
@@ -109,19 +109,11 @@ Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem,
 - Bilingual: ES at `/`, EN at `/en/`; the ES / EN toggle sits at the right of the nav (where QMP shows the date).
 - Mockups of the target design: https://claude.ai/artifact/FdpjJMiwQ1xcnt2bhpEy9e
 
-> ⚠️ **Transition in progress:** the code below still reflects the OLD design (dark theme, Playfair + Inter, terracotta accent, cards, the animations listed next). The target is the Estilo above. Until the restyle lands, the Estilo wins for any new work.
-
 ---
 
-## Animations — OLD design, to be removed in the restyle (all respect `prefers-reduced-motion`)
+## Animations
 
-- **Hero entrance:** tagline / subtitle / CTAs stagger-fade on load (CSS).
-- **Hero parallax:** background shifts slower than scroll. Gated OFF under reduced-motion.
-- **Hero slideshow:** cross-fades between the photos in `heroPhotos` (Hero.astro) every 6.5s. Runs even under reduced-motion (an opacity fade isn't "motion"; it just becomes an instant swap there). If it "doesn't change," wait 6.5s and confirm there are ≥2 photos.
-- **Card spotlight:** a soft terracotta glow follows the cursor on project cards (`--mx`/`--my` updated on mousemove).
-- **Count-up:** case-study metrics count from 0 when scrolled into view.
-- **Section-title underline:** an accent line draws in under each section title on reveal.
-- **Scroll-reveal:** sections/cards fade-up via IntersectionObserver. The hidden state is gated behind a `.js` class (set in `<head>`) so content is still visible if JS fails.
+Only one: the **hero slideshow** cross-fades between the photos in `heroPhotos` (Hero.astro) every 6.5s. Under reduced-motion `base.css` removes the transition, so it becomes an instant swap. Everything else (parallax, count-up, scroll-reveal, card spotlight, etc.) was removed on purpose — see the Estilo.
 
 ---
 

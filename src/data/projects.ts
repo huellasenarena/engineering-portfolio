@@ -78,16 +78,16 @@ export const projects: Project[] = [
           'Cada palabra se reprograma según mi rendimiento con SM-2. Un calendario muestra qué toca revisar y cuándo. Modos de práctica: espaciada, situación (recall activo), libre e imagen (describir una foto con análisis por visión).',
           'Para convertirlo en producto: autenticación propia en el edge (email/PBKDF2 + Google OAuth sin librería, verificación JWKS RS256 con Web Crypto), base de datos multi-tenant en Cloudflare D1, y BYOK — cada usuario usa su propia clave de IA, coste cero para el servidor.',
         ],
-        architecture: `  📱 iPhone (palabra subrayada)        🌐 App de una página (Safari)
+        architecture: `     iPhone (palabra subrayada)           App de una página (Safari)
         │  Shortcut → POST /add               │  login Google / email → JWT
         │  (+ token personal)                 │
         ▼                                     ▼
-                 ⚙️  Cloudflare Worker (edge)
+                     Cloudflare Worker (edge)
                  auth JWT · BYOK · ruta /add
                           │
           ┌───────────────┼────────────────────┐
           ▼               ▼                     ▼
-  🤖 OpenAI         🤖 OpenAI / Gemini    🗄️ Cloudflare D1
+     OpenAI            OpenAI / Gemini       Cloudflare D1
   detección idioma  evaluación de frase   (SQLite edge)
   + duplicados      (clave del usuario,   datos por user_id:
   (gpt-4.1-mini)     BYOK)                palabras · progreso · etc.
@@ -162,16 +162,16 @@ export const projects: Project[] = [
           'Each word is rescheduled based on my performance with SM-2. A calendar shows what\'s due and when. Practice modes: spaced, situation (active recall), free, and image (describe a photo with vision analysis).',
           'To turn it into a product: custom auth at the edge (email/PBKDF2 + Google OAuth without a library, JWKS RS256 verification with Web Crypto), a multi-tenant database on Cloudflare D1, and BYOK — each user brings their own AI key, zero server cost.',
         ],
-        architecture: `  📱 iPhone (underlined word)           🌐 Single-page app (Safari)
+        architecture: `     iPhone (underlined word)              Single-page app (Safari)
         │  Shortcut → POST /add               │  Google / email login → JWT
         │  (+ personal token)                 │
         ▼                                     ▼
-                 ⚙️  Cloudflare Worker (edge)
+                     Cloudflare Worker (edge)
                  JWT auth · BYOK · /add route
                           │
           ┌───────────────┼────────────────────┐
           ▼               ▼                     ▼
-  🤖 OpenAI         🤖 OpenAI / Gemini    🗄️ Cloudflare D1
+     OpenAI            OpenAI / Gemini       Cloudflare D1
   language detect   sentence evaluation  (edge SQLite)
   + duplicates      (user's own key,     data by user_id:
   (gpt-4.1-mini)     BYOK)               words · progress · etc.
@@ -265,27 +265,27 @@ export const projects: Project[] = [
           'Playwright automatiza el acceso en headless: en francés, autenticación en la BnF y búsqueda en Europresse; en español, acceso directo con bypass del paywall (El País) usando sesión persistente.',
           'Readability limpia el contenido y el artículo aparece en modo lectura —en menos de 15 segundos— listo para evaluar con me gusta / no me gusta.',
         ],
-        architecture: `  📱 iOS Shortcut        🌐 Web (Safari)
+        architecture: `     iOS Shortcut           Web (Safari)
         │  POST /add         │
         └──────────┬─────────┘
                    ▼
-        ⚙️ Flask (Hetzner VPS)
+           Flask (Hetzner VPS)
         Google OAuth · cola de trabajos
                    │
         ┌──────────┴──────────┐
         │ FR: palabras clave   │ ES: URL directa
         ▼                      ▼
-  🎭 Playwright           🎭 Playwright
+     Playwright              Playwright
   BnF → Europresse        bypass paywall
         │                      │
         ▼                      ▼
-  📝 Texto limpio         📰 Readability
+     Texto limpio            Readability
         └──────────┬──────────┘
                    ▼
-        🗄️ SQLite (articles.db)
+           SQLite (articles.db)
         like · dislike · tiempo · scroll
                    ▼
-        📖 Lector personal`,
+           Lector personal`,
         stack: [
           { layer: 'Automatización navegador', tech: 'Playwright + Chromium (headless)' },
           { layer: 'Extracción de contenido', tech: 'readability-lxml (ES), extracción propia (FR)' },
@@ -353,27 +353,27 @@ export const projects: Project[] = [
           'Playwright automates access headless: in French, BnF authentication and Europresse search; in Spanish, direct access with paywall bypass (El País) using a persistent session.',
           'Readability cleans the content and the article appears in reader mode —in under 15 seconds— ready to rate with like / dislike.',
         ],
-        architecture: `  📱 iOS Shortcut        🌐 Web (Safari)
+        architecture: `     iOS Shortcut           Web (Safari)
         │  POST /add         │
         └──────────┬─────────┘
                    ▼
-        ⚙️ Flask (Hetzner VPS)
+           Flask (Hetzner VPS)
         Google OAuth · job queue
                    │
         ┌──────────┴──────────┐
         │ FR: keywords         │ ES: direct URL
         ▼                      ▼
-  🎭 Playwright           🎭 Playwright
+     Playwright              Playwright
   BnF → Europresse        paywall bypass
         │                      │
         ▼                      ▼
-  📝 Clean text           📰 Readability
+     Clean text              Readability
         └──────────┬──────────┘
                    ▼
-        🗄️ SQLite (articles.db)
+           SQLite (articles.db)
         like · dislike · time · scroll
                    ▼
-        📖 Personal reader`,
+           Personal reader`,
         stack: [
           { layer: 'Browser automation', tech: 'Playwright + Chromium (headless)' },
           { layer: 'Content extraction', tech: 'readability-lxml (ES), custom extraction (FR)' },
@@ -467,22 +467,22 @@ export const projects: Project[] = [
           'OpenAI genera automáticamente las etiquetas (keywords) de cada entrada.',
           'La acción hace commit, despliega el sitio estático en GitHub Pages y me notifica por Telegram que la entrada está publicada.',
         ],
-        architecture: `  ✍️  iA Writer (iPad)
+        architecture: `      iA Writer (iPad)
         │  texto plano
         ▼
-  📲  iOS Shortcut  ──POST──▶  ☁️  Apps Script (doPost)
+      iOS Shortcut  ──POST──▶      Apps Script (doPost)
                                       │
                                       ▼
-                                 📄  Google Docs
+                                     Google Docs
                                       │  Docs API · service account
                                       ▼
-  ⚙️  GitHub Action  ──▶  🐍  Python  ──▶  🤖  OpenAI
+      GitHub Action  ──▶      Python  ──▶      OpenAI
         │              parse · validate        (keywords)
         │              SHA-256 · merge            │
         │                                         ▼
-        │                                 🌐  GitHub Pages
+        │                                     GitHub Pages
         ▼
-  🔔  Telegram: "publicado ✅"`,
+      Telegram: "publicado"`,
         stack: [
           { layer: 'Entrada / escritura', tech: 'iA Writer, Atajos de iOS/iPadOS' },
           { layer: 'Puente de captura', tech: 'Google Apps Script (web app doPost), gestionado con clasp' },
@@ -546,22 +546,22 @@ export const projects: Project[] = [
           'OpenAI automatically generates keyword tags for each entry.',
           'The action commits, deploys the static site on GitHub Pages, and notifies me on Telegram that the entry is live.',
         ],
-        architecture: `  ✍️  iA Writer (iPad)
+        architecture: `      iA Writer (iPad)
         │  plain text
         ▼
-  📲  iOS Shortcut  ──POST──▶  ☁️  Apps Script (doPost)
+      iOS Shortcut  ──POST──▶      Apps Script (doPost)
                                       │
                                       ▼
-                                 📄  Google Docs
+                                     Google Docs
                                       │  Docs API · service account
                                       ▼
-  ⚙️  GitHub Action  ──▶  🐍  Python  ──▶  🤖  OpenAI
+      GitHub Action  ──▶      Python  ──▶      OpenAI
         │              parse · validate        (keywords)
         │              SHA-256 · merge            │
         │                                         ▼
-        │                                 🌐  GitHub Pages
+        │                                     GitHub Pages
         ▼
-  🔔  Telegram: "published ✅"`,
+      Telegram: "published"`,
         stack: [
           { layer: 'Authoring', tech: 'iA Writer, iOS/iPadOS Shortcuts' },
           { layer: 'Capture bridge', tech: 'Google Apps Script (web app doPost), managed with clasp' },

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0f0e0d"/>
+  <rect width="64" height="64" rx="4" fill="#222"/>
   <text x="50%" y="50%"
         text-anchor="middle" dominant-baseline="central"
         font-family="Georgia, 'Times New Roman', serif"
-        font-size="34" font-weight="700" fill="#c47c5a"
+        font-size="34" font-weight="400" fill="#fafafa"
         letter-spacing="-1">JS</text>
 </svg>

@@ -23,8 +23,6 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Mark JS as available before paint so scroll-reveal only hides content when JS can reveal it -->
-    <script is:inline>document.documentElement.classList.add('js');</script>
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
@@ -53,28 +51,9 @@ const ogLocale = lang === 'es' ? 'es_CO' : 'en_US';
     <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={alternateLang} href={new URL(alternateUrl, Astro.site).href} />
     <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="theme-color" content="#fafafa" />
   </head>
   <body>
     <slot />
-    <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-      );
-
-      document.querySelectorAll('[data-reveal]').forEach((el, i) => {
-        (el as HTMLElement).style.transitionDelay = `${i * 60}ms`;
-        observer.observe(el);
-      });
-    </script>
   </body>
 </html>
