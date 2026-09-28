@@ -51,18 +51,20 @@ const links: { page: Page; label: string }[] = [
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 10px 24px;
-    font-size: var(--t-nav);
+    gap: 10px 28px;
+    /* Excepción de este proyecto: nav un poco más grande que en QMP, para equilibrar las fotos */
+    font-size: 1.05rem;
   }
 
   .nav-left {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px 24px;
+    gap: 10px 28px;
   }
 
   .nombre {
-    margin-right: 12px;
+    margin-right: 16px;
+    font-size: 1.15rem;
   }
 
   /* En la portada el nombre no se subraya: ya estás ahí */

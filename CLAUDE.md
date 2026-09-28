@@ -108,6 +108,8 @@ Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem,
 - Mono (`--mono`) is used for the technical layer: stack lists, stack table, architecture diagrams.
 - **Wider page:** `--ancho: 1200px` (set in `global.css`), so photos are bigger. Long text stays at `--ancho-texto`.
 - **One page per section:** home (tagline + photos), Proyectos, Sobre mí, Contacto. No duplicate links: the nav is the only way to Proyectos/Contacto; GitHub lives on Contacto.
+- **Bigger type than QMP where photos dominate:** nav 1.05rem (name 1.15rem), home tagline 2.1rem.
+- **Photo captions:** `heroPhotos` in `Hero.astro` has `caption: { es, en }` per photo. Empty = nothing shown on the live site; `npm run dev` shows a `[pie de foto…]` marker. Jack writes them.
 - Home keeps the photo slideshow (cross-fade every 6.5s); photo sits below the tagline, nothing on top, **never cropped** (`object-fit: contain`, aligned left). Not all photos are B&W (the fountain is color, on purpose).
 - Bilingual: ES at `/`, EN at `/en/`; the ES / EN toggle sits at the right of the nav (where QMP shows the date).
 - Mockups of the target design: https://claude.ai/artifact/FdpjJMiwQ1xcnt2bhpEy9e

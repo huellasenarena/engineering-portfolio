@@ -4,48 +4,74 @@ import { getLangFromUrl, useTranslations } from '../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Slideshow del hero — añadir/quitar nombres de public/photos/ para cambiar la rotación
-const heroPhotos = ['fountain.jpg', 'jet.jpg', 'skater.jpg', 'street.jpg'];
+// Slideshow del hero — cada foto en public/photos/ con su pie de foto (es / en).
+// Pies vacíos = no se muestra nada en el sitio. En `npm run dev` aparece un marcador para verlos.
+const heroPhotos = [
+  { file: 'fountain.jpg', caption: { es: '', en: '' } },
+  { file: 'jet.jpg',      caption: { es: '', en: '' } },
+  { file: 'skater.jpg',   caption: { es: '', en: '' } },
+  { file: 'street.jpg',   caption: { es: '', en: '' } },
+];
+
+const showMarker = import.meta.env.DEV;
+const captions = heroPhotos.map(({ file, caption }) =>
+  caption[lang] || (showMarker ? `[pie de foto: ${file} — lo escribe Jack]` : '')
+);
+const hasCaptions = captions.some(Boolean);
 ---
 
 <section class="hero container" id="hero">
   <h1>{t('hero.tagline')}</h1>
   <p class="sub">{t('hero.sub')}</p>
 
-  <figure class="foto">
-    {heroPhotos.map((photo, i) => (
-      <img
-        src={`/photos/${photo}`}
-        alt=""
-        class:list={{ oculta: i !== 0 }}
-        loading={i === 0 ? 'eager' : 'lazy'}
-      />
-    ))}
+  <figure>
+    <div class="foto">
+      {heroPhotos.map(({ file }, i) => (
+        <img
+          src={`/photos/${file}`}
+          alt=""
+          class:list={{ oculta: i !== 0 }}
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
+      ))}
+    </div>
+    {hasCaptions && (
+      <div class="pies">
+        {captions.map((c, i) => (
+          <figcaption class:list={['pie', { oculta: i !== 0 }]}>{c}</figcaption>
+        ))}
+      </div>
+    )}
   </figure>
 </section>
 
 <style>
   .hero {
-    margin-top: 64px;
+    margin-top: 72px;
     padding-bottom: 80px;
   }
 
+  /* Excepción de la portada: la frase es más grande para no quedar aplastada por las fotos */
   h1 {
-    margin: 0 0 10px;
+    font-size: 2.1rem;
+    line-height: 1.25;
+    margin: 0 0 12px;
   }
 
   .sub {
     color: var(--gris);
-    font-size: var(--t-texto);
-    margin: 0 0 36px;
+    font-size: 1.05rem;
+    margin: 0 0 40px;
   }
 
+  figure {
+    margin: 0;
+  }
 
   .foto {
     position: relative;
     aspect-ratio: 3 / 2;
     max-width: 100%;
-    margin: 0;
     overflow: hidden;
   }
 
@@ -60,21 +86,42 @@ const heroPhotos = ['fountain.jpg', 'jet.jpg', 'skater.jpg', 'street.jpg'];
     transition: opacity 1.2s ease;
   }
 
-  .foto img.oculta {
+  /* Los pies se apilan en el mismo lugar y cambian junto con la foto */
+  .pies {
+    display: grid;
+    margin-top: 10px;
+  }
+
+  .pie {
+    grid-area: 1 / 1;
+    font-size: var(--t-pequeno);
+    font-style: italic;
+    color: var(--gris);
+    transition: opacity 1.2s ease;
+  }
+
+  .oculta {
     opacity: 0;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.7rem; }
   }
 </style>
 
 <script>
-  // Fundido entre fotos. Con reduced-motion, base.css quita la transición y el cambio es instantáneo.
+  // Fundido entre fotos (y sus pies). Con reduced-motion, base.css quita la transición y el cambio es instantáneo.
   const fotos = Array.from(document.querySelectorAll<HTMLImageElement>('.foto img'));
+  const pies = Array.from(document.querySelectorAll<HTMLElement>('.pie'));
   if (fotos.length > 1) {
     fotos.forEach((img) => (img.loading = 'eager'));
     let actual = 0;
     setInterval(() => {
       fotos[actual].classList.add('oculta');
+      pies[actual]?.classList.add('oculta');
       actual = (actual + 1) % fotos.length;
       fotos[actual].classList.remove('oculta');
+      pies[actual]?.classList.remove('oculta');
     }, 6500);
   }
 </script>
