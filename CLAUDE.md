@@ -94,12 +94,26 @@ Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem,
 - **Do NOT highlight teaching** (Inspirit AI) — Jack is positioned as a builder, not an educator. Teaching can live on the CV, not the site.
 - **No university branding in the hero.** USC appears once in the About body, not as a badge.
 - **No headshot/selfie.** Personality comes from his B&W photography (he's a photographer).
-- Spanish is **not** his native language. Levels: English native, Spanish B2/C1, French DALF C1, Greek B2.
-- Tone: clean, fast, careful typography, technical but warm. Dark theme, single terracotta accent (`--accent: #c47c5a`).
+- Spanish is **not** his native language. Levels: English native, Spanish DELE C1 (passed), French DALF C1, Greek B2.
+- **Copy is Jack's.** Never write or rewrite site text for him; he writes first, Claude reviews and suggests. Leave `[lo escribe Jack: …]` markers for missing text. (Current copy in `ui.ts` / `projects.ts` is provisional, mostly AI-drafted, and will be rewritten by Jack.)
 
 ---
 
-## Animations (all respect `prefers-reduced-motion`)
+## Estilo
+
+@~/Desktop/estilo/estilo.md
+
+### Excepciones en este proyecto
+- Mono (`--mono`) is used for the technical layer: stack lists, stack table, architecture diagrams.
+- Hero keeps the B&W photo slideshow (cross-fade every 6.5s); photo sits below the tagline, full width, nothing on top.
+- Bilingual: ES at `/`, EN at `/en/`; the ES / EN toggle sits at the right of the nav (where QMP shows the date).
+- Mockups of the target design: https://claude.ai/artifact/FdpjJMiwQ1xcnt2bhpEy9e
+
+> ⚠️ **Transition in progress:** the code below still reflects the OLD design (dark theme, Playfair + Inter, terracotta accent, cards, the animations listed next). The target is the Estilo above. Until the restyle lands, the Estilo wins for any new work.
+
+---
+
+## Animations — OLD design, to be removed in the restyle (all respect `prefers-reduced-motion`)
 
 - **Hero entrance:** tagline / subtitle / CTAs stagger-fade on load (CSS).
 - **Hero parallax:** background shifts slower than scroll. Gated OFF under reduced-motion.
