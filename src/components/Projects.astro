@@ -10,8 +10,8 @@ const featured = projects.filter((p) => !p.wip);
 const wip = projects.filter((p) => p.wip);
 ---
 
-<section id="projects" class="container seccion">
-  <h2 class="titulo-seccion">{t('projects.title')}</h2>
+<section class="container pagina">
+  <h1 class="titulo-pagina">{t('projects.title')}</h1>
   <ul class="lista">
     {featured.map((p) => <ProjectCard project={p} lang={lang} />)}
     {wip.map((p) => <ProjectCard project={p} lang={lang} />)}

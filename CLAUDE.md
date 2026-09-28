@@ -35,24 +35,25 @@ Deploy is automatic: push to `main` → `.github/workflows/deploy.yml` builds an
 src/
 ├── i18n/
 │   ├── ui.ts            # ALL UI strings (es + en). Single source of truth for copy.
-│   └── utils.ts         # getLangFromUrl, useTranslations(t), getAlternateUrl
+│   └── utils.ts         # getLangFromUrl, useTranslations(t), getAlternateUrl, pageUrl(page, lang)
 ├── data/
 │   └── projects.ts      # Project[] data + CaseStudyContent model + projectUrl() helper
 ├── layouts/
 │   └── Layout.astro     # <head>: SEO, Open Graph, canonical, hreflang, favicons
 ├── components/
-│   ├── Header.astro     # static text nav (QMP-style), ES / EN at the right
-│   ├── Hero.astro       # tagline + links + full-width photo SLIDESHOW below
+│   ├── Header.astro     # static text nav (QMP-style), `current` prop underlines the active page, ES / EN at the right
+│   ├── Hero.astro       # home: tagline + photo SLIDESHOW below (uncropped, object-fit: contain)
 │   ├── Projects.astro   # list (<ul>) of ProjectCard
 │   ├── ProjectCard.astro# list item: title link (case study / live site) + one line + stack in mono
 │   ├── CaseStudy.astro  # full case-study renderer (used by the dedicated pages)
 │   ├── About.astro      # short bio + languages (list with thin lines)
 │   └── Contact.astro    # LinkedIn / GitHub / CV links (some disabled placeholders)
 └── pages/
-    ├── index.astro              # ES home
-    ├── en/index.astro           # EN home
-    ├── proyectos/[slug].astro   # ES case-study pages (getStaticPaths over projects w/ caseStudy)
-    └── en/projects/[slug].astro # EN case-study pages
+    ├── index.astro              # ES home (Hero only)        ↔ en/index.astro
+    ├── proyectos/index.astro    # ES projects list            ↔ en/projects/index.astro
+    ├── proyectos/[slug].astro   # ES case studies             ↔ en/projects/[slug].astro
+    ├── sobre-mi.astro           # ES about                    ↔ en/about.astro
+    └── contacto.astro           # ES contact                  ↔ en/contact.astro
 public/
 ├── CNAME                 # jackstefoto.com (custom domain for GitHub Pages)
 ├── favicon.svg           # JS monogram
@@ -105,7 +106,9 @@ Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem,
 
 ### Excepciones en este proyecto
 - Mono (`--mono`) is used for the technical layer: stack lists, stack table, architecture diagrams.
-- Hero keeps the B&W photo slideshow (cross-fade every 6.5s); photo sits below the tagline, full width, nothing on top.
+- **Wider page:** `--ancho: 1200px` (set in `global.css`), so photos are bigger. Long text stays at `--ancho-texto`.
+- **One page per section:** home (tagline + photos), Proyectos, Sobre mí, Contacto. No duplicate links: the nav is the only way to Proyectos/Contacto; GitHub lives on Contacto.
+- Home keeps the photo slideshow (cross-fade every 6.5s); photo sits below the tagline, nothing on top, **never cropped** (`object-fit: contain`, aligned left). Not all photos are B&W (the fountain is color, on purpose).
 - Bilingual: ES at `/`, EN at `/en/`; the ES / EN toggle sits at the right of the nav (where QMP shows the date).
 - Mockups of the target design: https://claude.ai/artifact/FdpjJMiwQ1xcnt2bhpEy9e
 

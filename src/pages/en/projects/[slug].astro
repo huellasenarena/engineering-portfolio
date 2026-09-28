@@ -19,7 +19,7 @@ const cs = project.caseStudy!.en;
   description={cs.tagline}
   altPath={projectUrl(project.slug, 'es')}
 >
-  <Header altUrl={projectUrl(project.slug, 'es')} />
+  <Header current="projects" altUrl={projectUrl(project.slug, 'es')} />
   <main>
     <CaseStudy project={project} lang="en" />
   </main>

@@ -4,6 +4,10 @@
 /* Lo propio del portfolio. Las reglas generales están en tokens.css / base.css
    (copiados de ~/Desktop/estilo con sync.sh — no editarlos aquí). */
 
+/* Excepción de este proyecto: página más ancha (1200px) para que las fotos llenen más.
+   El texto largo sigue limitado por --ancho-texto. */
+:root { --ancho: 1200px; }
+
 html { font-size: 16px; }
 
 img { max-width: 100%; display: block; }
@@ -17,8 +21,7 @@ img { max-width: 100%; display: block; }
 
 .texto { max-width: var(--ancho-texto); }
 
-.titulo-seccion {
-  font-size: var(--t-h1);
+.titulo-pagina {
   margin: 0 0 32px;
 }
 
@@ -30,13 +33,9 @@ img { max-width: 100%; display: block; }
   clip: rect(0 0 0 0);
 }
 
-/* Secciones de la página principal: espacio y una línea fina entre ellas */
-.seccion {
-  margin-top: 60px;
-}
-.seccion > .titulo-seccion {
-  padding-top: 40px;
-  border-top: 1px solid var(--linea-suave);
+/* Cada sección es una página propia (proyectos, sobre mí, contacto) */
+.pagina {
+  margin-top: 64px;
 }
 main {
   padding-bottom: 80px;

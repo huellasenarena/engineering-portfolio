@@ -1,32 +1,34 @@
 ---
-import { getLangFromUrl, getAlternateUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl, getAlternateUrl, useTranslations, pageUrl, type Page } from '../i18n/utils';
 
 interface Props {
   altUrl?: string;
+  current?: Page;
 }
 
-const { altUrl } = Astro.props;
+const { altUrl, current } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const alternateLang = lang === 'es' ? 'en' : 'es';
-const alternateUrl = altUrl ?? getAlternateUrl(Astro.url, alternateLang);
+const alternateUrl = altUrl ?? (current ? pageUrl(current, alternateLang) : getAlternateUrl(Astro.url, alternateLang));
 
-const homeHref = lang === 'es' ? '/' : '/en/';
-const projectsHref = `${homeHref}#projects`;
-const aboutHref = `${homeHref}#about`;
-const contactHref = `${homeHref}#contact`;
+const links: { page: Page; label: string }[] = [
+  { page: 'projects', label: t('nav.projects') },
+  { page: 'about', label: t('nav.about') },
+  { page: 'contact', label: t('nav.contact') },
+];
 ---
 
 <header class="container">
   <nav>
     <div class="nav-left">
-      <a href={homeHref} class="nombre">Jack Stefanou</a>
-      <a href={projectsHref}>{t('nav.projects')}</a>
-      <a href={aboutHref}>{t('nav.about')}</a>
-      <a href={contactHref}>{t('nav.contact')}</a>
+      <a href={pageUrl('home', lang)} class="nombre" aria-current={current === 'home' ? 'page' : undefined}>Jack Stefanou</a>
+      {links.map(({ page, label }) => (
+        <a href={pageUrl(page, lang)} aria-current={current === page ? 'page' : undefined}>{label}</a>
+      ))}
     </div>
     <span class="lang">
-      <span aria-current="true">{lang.toUpperCase()}</span>
+      <span class="lang-actual">{lang.toUpperCase()}</span>
       /
       <a href={alternateUrl} hreflang={alternateLang} aria-label={alternateLang === 'en' ? 'English' : 'Español'}>
         {alternateLang.toUpperCase()}
@@ -58,12 +60,17 @@ const contactHref = `${homeHref}#contact`;
     margin-right: 12px;
   }
 
+  /* En la portada el nombre no se subraya: ya estás ahí */
+  .nombre[aria-current] {
+    border-bottom-color: transparent;
+  }
+
   .lang {
     margin-left: auto;
     color: var(--gris);
   }
 
-  .lang [aria-current] {
+  .lang-actual {
     color: var(--tinta);
   }
 </style>

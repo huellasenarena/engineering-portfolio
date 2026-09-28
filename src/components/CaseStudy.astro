@@ -1,7 +1,7 @@
 ---
 import type { Project } from '../data/projects';
 import type { Lang } from '../i18n/utils';
-import { useTranslations } from '../i18n/utils';
+import { useTranslations, pageUrl } from '../i18n/utils';
 
 interface Props {
   project: Project;
@@ -12,11 +12,11 @@ const { project, lang } = Astro.props;
 const t = useTranslations(lang);
 const cs = project.caseStudy![lang];
 const content = project[lang];
-const backHref = lang === 'es' ? '/#projects' : '/en/#projects';
+const backHref = pageUrl('projects', lang);
 ---
 
 <article class="cs container">
-  <a href={backHref} class="volver">← {t('cs.back')}</a>
+  <a href={backHref} class="volver">← {t('nav.projects')}</a>
 
   <header class="cs__header">
     <h1>{content.title}</h1>

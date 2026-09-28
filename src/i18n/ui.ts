@@ -3,6 +3,7 @@ export const defaultLang = 'es';
 
 export const ui = {
   es: {
+    'home.title': 'Jack Stefanou — Desarrollador Full-Stack · IA',
     'nav.projects': 'Proyectos',
     'nav.about': 'Sobre mí',
     'nav.contact': 'Contacto',
@@ -48,6 +49,7 @@ export const ui = {
     'cs.diagramNote': 'El único paso manual es ejecutar el atajo. Todo lo demás es automático.',
   },
   en: {
+    'home.title': 'Jack Stefanou — Full-Stack Developer · AI',
     'nav.projects': 'Projects',
     'nav.about': 'About',
     'nav.contact': 'Contact',

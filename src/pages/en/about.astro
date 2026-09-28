@@ -1,19 +1,19 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
-import Hero from '../../components/Hero.astro';
+import About from '../../components/About.astro';
 import { useTranslations, pageUrl } from '../../i18n/utils';
 
 const t = useTranslations('en');
 ---
 
 <Layout
-  title={t('home.title')}
+  title={`${t('about.title')} — Jack Stefanou`}
   description={t('hero.tagline')}
-  altPath={pageUrl('home', 'es')}
+  altPath={pageUrl('about', 'es')}
 >
-  <Header current="home" />
+  <Header current="about" />
   <main>
-    <Hero />
+    <About />
   </main>
 </Layout>
