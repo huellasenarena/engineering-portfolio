@@ -28,11 +28,16 @@ const links: { page: Page; label: string }[] = [
       ))}
     </div>
     <span class="lang">
-      <span class="lang-actual">{lang.toUpperCase()}</span>
-      /
-      <a href={alternateUrl} hreflang={alternateLang} aria-label={alternateLang === 'en' ? 'English' : 'Español'}>
-        {alternateLang.toUpperCase()}
-      </a>
+      {(['es', 'en'] as const).map((l, i) => (
+        <>
+          {i > 0 && ' / '}
+          {l === lang ? (
+            <span class="lang-actual">{l.toUpperCase()}</span>
+          ) : (
+            <a href={alternateUrl} hreflang={l} aria-label={l === 'en' ? 'English' : 'Español'}>{l.toUpperCase()}</a>
+          )}
+        </>
+      ))}
     </span>
   </nav>
 </header>
