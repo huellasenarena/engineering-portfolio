@@ -10,58 +10,51 @@ interface Props {
 
 const { project, lang } = Astro.props;
 const t = useTranslations(lang);
-const cs = project.caseStudy![lang];
-const content = project[lang];
+const cs = project.caseStudy!;
 const backHref = pageUrl('projects', lang);
+
+// Marcadores [lo escribe Jack: …] solo en `npm run dev`
+const isMarker = (p: string) => p.startsWith('[lo escribe Jack');
+const visible = (body: string[]) => body.filter((p) => import.meta.env.DEV || !isMarker(p));
+
+// *palabra* → itálica (el resto del texto se escapa)
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const html = (s: string) => esc(s).replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+const diagramInline = cs.sections.some((s) => s.diagram);
 ---
 
 <article class="cs container">
   <a href={backHref} class="volver">← {t('nav.projects')}</a>
 
   <header class="cs__header">
-    <h1>{content.title}</h1>
-    <p class="tagline">{cs.tagline}</p>
-    <p class="meta">
-      {cs.meta}
-      {project.link && <> · <a href={project.link} target="_blank" rel="noopener">{t('cs.viewLive')}</a></>}
-      {project.github && <> · <a href={project.github} target="_blank" rel="noopener">{t('cs.viewCode')}</a></>}
-    </p>
-
-    {cs.metrics.length > 0 && (
-      <div class="cols">
-        {cs.metrics.map((m) => (
-          <div class="col">
-            <div class="col-num">{m.value}{m.suffix ?? ''}</div>
-            <div class="col-lab">{m.label}</div>
-          </div>
-        ))}
-      </div>
+    <h1>{project.title}</h1>
+    {(project.link || project.github || project.repoNote) && (
+      <p class="meta">
+        {project.link && <a href={project.link} target="_blank" rel="noopener">{t('cs.viewLive')}</a>}
+        {project.link && (project.github || project.repoNote) && ' · '}
+        {project.github && <a href={project.github} target="_blank" rel="noopener">{t('cs.viewCode')}</a>}
+        {!project.github && project.repoNote}
+      </p>
     )}
   </header>
 
-  <section class="texto">
-    <h2>{t('cs.overview')}</h2>
-    {cs.overview.map((p, i) => <p class:list={{ lead: i === 0 }}>{p}</p>)}
-  </section>
+  {cs.sections.map((s, i) => (
+    <section class="texto">
+      <h2>{s.title}</h2>
+      {visible(s.body).map((p, j) => (
+        <p class:list={{ lead: i === 0 && j === 0, marca: isMarker(p) }} set:html={html(p)} />
+      ))}
+      {s.diagram && cs.architecture && (
+        <div class="diagrama"><pre>{cs.architecture}</pre></div>
+      )}
+    </section>
+  ))}
 
-  <section class="texto">
-    <h2>{t('cs.problem')}</h2>
-    {cs.problem.map((p) => <p>{p}</p>)}
-  </section>
-
-  <section class="texto">
-    <h2>{t('cs.solution')}</h2>
-    <p>{cs.solutionIntro}</p>
-    <ol class="pasos">
-      {cs.steps.map((step) => <li>{step}</li>)}
-    </ol>
-  </section>
-
-  {cs.architecture && (
+  {!diagramInline && cs.architecture && (
     <section>
       <h2>{t('cs.architecture')}</h2>
       <div class="diagrama"><pre>{cs.architecture}</pre></div>
-      <p class="nota">{t('cs.diagramNote')}</p>
     </section>
   )}
 
@@ -79,28 +72,6 @@ const backHref = pageUrl('projects', lang);
         </tbody>
       </table>
     </div>
-  </section>
-
-  <section class="texto">
-    <h2>{t('cs.challenges')}</h2>
-    {cs.challenges.map((c) => (
-      <div class="reto">
-        <h3>{c.title}</h3>
-        <p>{c.body}</p>
-      </div>
-    ))}
-  </section>
-
-  <section class="texto">
-    <h2>{t('cs.results')}</h2>
-    <ul class="resultados">
-      {cs.results.map((r) => <li>{r}</li>)}
-    </ul>
-  </section>
-
-  <section class="texto">
-    <h2>{t('cs.demonstrates')}</h2>
-    <blockquote class="cierre">{cs.demonstrates}</blockquote>
   </section>
 </article>
 
@@ -122,44 +93,20 @@ const backHref = pageUrl('projects', lang);
     margin: 0 0 8px;
   }
 
-  .tagline {
-    font-style: italic;
-    color: var(--gris);
-    margin: 0 0 4px;
-  }
 
   .meta {
     font-size: 0.85rem;
     color: var(--gris);
-    margin: 0 0 32px;
+    margin: 0;
   }
 
-  /* Métricas: tres columnas con líneas finas, números fijos */
-  .cols {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 600px;
-    border-top: 1px solid var(--linea-suave);
-    padding-top: 18px;
-    margin-bottom: 8px;
+  .marca {
+    color: var(--gris-claro);
+    font-style: italic;
   }
-  .col {
-    text-align: center;
-    padding: 0 6px;
-    border-left: 1px solid var(--linea-suave);
-  }
-  .col:first-child { border-left: 0; }
-  .col-num {
-    font-size: 2.2rem;
-    line-height: 1.15;
-    font-variant-numeric: tabular-nums;
-  }
-  .col-lab {
-    font-size: 0.8rem;
-    line-height: 1.4;
-    color: var(--gris);
-    margin-top: 4px;
-  }
+
+  .diagrama { margin-top: 8px; }
+
 
   section { margin-top: 44px; }
 
@@ -179,24 +126,6 @@ const backHref = pageUrl('projects', lang);
     margin: 2px 6px 0 0;
   }
 
-  .pasos {
-    list-style: none;
-    counter-reset: paso;
-    margin: 0;
-    padding: 0;
-  }
-  .pasos li {
-    counter-increment: paso;
-    display: grid;
-    grid-template-columns: 2em 1fr;
-    margin-bottom: 14px;
-    font-size: 0.97rem;
-    line-height: 1.7;
-  }
-  .pasos li::before {
-    content: counter(paso) ".";
-    color: var(--gris);
-  }
 
   .diagrama {
     overflow-x: auto;
@@ -208,12 +137,6 @@ const backHref = pageUrl('projects', lang);
     font-size: 0.74rem;
     line-height: 1.55;
     color: #333;
-  }
-  .nota {
-    font-size: var(--t-pequeno) !important;
-    font-style: italic;
-    color: var(--gris);
-    margin-top: 12px !important;
   }
 
   .tabla-wrap { overflow-x: auto; }
@@ -243,40 +166,10 @@ const backHref = pageUrl('projects', lang);
     line-height: 1.6;
   }
 
-  .reto { margin-bottom: 18px; }
-  .reto h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0 0 2px;
-  }
-  .reto p {
-    font-size: var(--t-texto);
-    color: #333;
-    margin: 0;
-  }
 
-  .resultados {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .resultados li {
-    padding: 8px 0;
-    border-top: 1px solid var(--linea-suave);
-    font-size: 0.97rem;
-    line-height: 1.65;
-  }
 
-  .cierre {
-    font-style: italic;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #333;
-  }
 
   @media (max-width: 600px) {
-    .col-num { font-size: 1.7rem; }
-    .col-lab { font-size: 0.72rem; }
     p.lead::first-letter { font-size: 2.6rem; margin-top: 1px; }
   }
 </style>

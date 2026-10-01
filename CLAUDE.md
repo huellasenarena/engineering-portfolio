@@ -69,19 +69,22 @@ public/
 **All copy** lives in `src/i18n/ui.ts` (`ui.es` / `ui.en`) and `src/data/projects.ts`. Components pull strings via `t('key')`. To change wording, edit those two files — not the components.
 
 ### Adding / editing a project
-Edit `src/data/projects.ts`. Each `Project` has short `es`/`en` (title, problem, solution), a `stack` array, optional `link` (live demo), optional `github`, and optional `caseStudy`.
+Edit `src/data/projects.ts`. Each `Project` has `title`, `summary` (one line for the list, taken from Jack's text), a `stack` array, optional `link` (live site), optional `github` or `repoNote` (shown instead of a code link for a private repo), and optional `caseStudy`.
 
 - **Project WITHOUT `caseStudy`** → title links to `link` (live site) if present, otherwise plain text.
-- **Project WITH `caseStudy`** → card links to a dedicated page at `/proyectos/<slug>` (ES) and `/en/projects/<slug>` (EN). The page renders `CaseStudy.astro`: tagline, meta (+ site/code links), fixed metrics in 3 columns, overview, problem, numbered solution steps, optional ASCII architecture diagram, stack table, challenges, results, and a closing statement.
-- **`wip: true`** → greyed-out "in progress" list item (e.g. the Vertex AI placeholder).
+- **Project WITH `caseStudy`** → card links to `/proyectos/<slug>`. `CaseStudy.astro` renders: title, site/code links, Jack's `sections` (each a heading + paragraphs; `*x*` = italics; `diagram: true` puts the diagram at the end of that section, otherwise it gets its own "Arquitectura" section), then the stack table.
+- Paragraphs starting with `[lo escribe Jack` are markers: visible only in `npm run dev`.
+- **`wip: true`** → greyed-out "in progress" list item.
 
 ### Current project status
+Case studies now hold **Jack's own text** (Oct 2026): his sections (Motivación / Lo que hice / Lo que aprendí), then the ASCII diagram and the stack table. The AI-written `portfolio-case-study.md` files in each repo are reference only — facts to check against, not copy.
+
 | Project | Slug | Status |
 |---|---|---|
-| Qué Mal Poema | `que-mal-poema` | ✅ Full case study. Live quemalpoema.com, repo `qmp` (public). Source: `~/Desktop/qmp/portfolio-case-study.md` |
-| Personalized News Reader / Noticias Personalizadas | `news-reader` | ✅ Full case study. Repo `europresse-reader` is **PRIVATE** → no code link shown; no public live URL (behind Google OAuth). Source: `~/Desktop/actualités/portfolio-case-study.md` |
-| Vocab | `vocab-app` | ✅ Full case study. Live demo `huellasenarena.github.io/vocab-app`, repo `vocab-app` (public). Source: `~/Desktop/vocab-app/portfolio-case-study.md` |
-| ML en Vertex AI | `vertex-ml` | ⏳ Placeholder, `wip: true` ("Por definir") |
+| Vocab (BYOV) | `vocab-app` | Live byov.net, repo `vocab-app` (public) |
+| Lectora de periodismo | `news-reader` | Live link to the Pi (login wall). Repo `europresse-reader` stays **PRIVATE** (Jack's email in history; code about getting past anti-bot protections) → shows "disponible a pedido" note |
+| Qué Mal Poema | `que-mal-poema` | Live quemalpoema.com, repo `qmp` (public) |
+| A mí me strofa | `a-mi-me-strofa` | Live quemalpoema.com/site/mestrofa.html, repo `a-mi-mestrofa` (public). Replaced the Vertex AI placeholder |
 
 > Note: "News Reader" and "Europresse Reader" are the **same project** — it was renamed. Don't re-add it as a separate card.
 
@@ -152,7 +155,12 @@ There were **two hosted zones** for the domain in Route 53. The A records were a
 
 ## Next steps / TODO
 
-- [ ] Fill in the **Vertex AI** project when ready (remove `wip`, add content).
+- [ ] **English is hidden** (`showEnglish = false` in `src/i18n/utils.ts`; `/en/` pages deleted, restore from git history before commit "Jack's own text"). Comes back when Jack writes the English version.
+- [ ] Open points Jack will write (dev-only `[lo escribe Jack: …]` markers in `projects.ts`):
+  - A mí me strofa: the bridge before the "dos explicaciones" (model wins but accuracy = majority floor); 0,410 is with 40 training poems, macro-F1; only the logistic regression was trained.
+  - Vocab: the result after the strategy change.
+  - Vocab: "gratis" vs BYOK.
+  - (About) what he's looking for is now one line; may refine.
 - [ ] Enable **LinkedIn** when the profile is reactivated.
 - [ ] Add **CV** PDFs (ES + EN) and flip `cvAvailable`.
 - [ ] Decide whether to make the `europresse-reader` repo public (currently no code link on its case study).

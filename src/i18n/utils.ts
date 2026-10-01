@@ -2,6 +2,9 @@ import { ui, defaultLang } from './ui';
 
 export type Lang = keyof typeof ui;
 
+// El inglés está oculto hasta que Jack escriba su versión: sin enlace ES / EN, sin hreflang y sin páginas /en/.
+export const showEnglish = false;
+
 export function getLangFromUrl(url: URL): Lang {
   const [, first] = url.pathname.split('/');
   if (first in ui) return first as Lang;

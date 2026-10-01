@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, getAlternateUrl, useTranslations, pageUrl, type Page } from '../i18n/utils';
+import { getLangFromUrl, getAlternateUrl, useTranslations, pageUrl, showEnglish, type Page } from '../i18n/utils';
 
 interface Props {
   altUrl?: string;
@@ -27,7 +27,7 @@ const links: { page: Page; label: string }[] = [
         <a href={pageUrl(page, lang)} aria-current={current === page ? 'page' : undefined}>{label}</a>
       ))}
     </div>
-    <span class="lang">
+    {showEnglish && <span class="lang">
       {(['es', 'en'] as const).map((l, i) => (
         <>
           {i > 0 && ' / '}
@@ -38,7 +38,7 @@ const links: { page: Page; label: string }[] = [
           )}
         </>
       ))}
-    </span>
+    </span>}
   </nav>
 </header>
 

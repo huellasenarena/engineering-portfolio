@@ -11,12 +11,11 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const cs = project.caseStudy!.es;
 ---
 
 <Layout
-  title={`${project.es.title} — Jack Stefanou`}
-  description={cs.tagline}
+  title={`${project.title} — Jack Stefanou`}
+  description={project.summary}
   altPath={projectUrl(project.slug, 'en')}
 >
   <Header current="projects" altUrl={projectUrl(project.slug, 'en')} />

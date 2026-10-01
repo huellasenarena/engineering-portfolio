@@ -11,7 +11,6 @@ interface Props {
 
 const { project, lang } = Astro.props;
 const t = useTranslations(lang);
-const content = project[lang];
 
 // Con case study → página propia. Sin case study → sitio en vivo si existe. WIP → sin enlace.
 const href = project.wip
@@ -24,11 +23,11 @@ const external = !project.caseStudy && !!project.link;
 
 <li class:list={['proyecto', { wip: project.wip }]}>
   {href ? (
-    <a class="titulo" href={href} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>{content.title}</a>
+    <a class="titulo" href={href} {...(external ? { target: '_blank', rel: 'noopener' } : {})}>{project.title}</a>
   ) : (
-    <span class="titulo">{content.title}</span>
+    <span class="titulo">{project.title}</span>
   )}
-  <p class="desc">{project.wip ? t('projects.wip') : content.solution}</p>
+  <p class="desc">{project.wip ? t('projects.wip') : project.summary}</p>
   <p class="meta" aria-label={t('projects.stack')}>{project.stack.join(' · ')}</p>
 </li>
 

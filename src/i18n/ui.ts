@@ -8,8 +8,8 @@ export const ui = {
     'nav.about': 'Sobre mí',
     'nav.contact': 'Contacto',
 
-    'hero.tagline': 'Construyo, despliego y explico sistemas de IA full stack.',
-    'hero.sub': 'Desarrollador full-stack · Especialista en IA',
+    'hero.tagline': 'Desarrollador full stack buscando ir de 1 a 0; utilizo software para eliminar lo que nos pesa.',
+    'hero.sub': 'Especialista en IA',
     'hero.cta.github': 'GitHub',
     'hero.cta.contact': 'Contacto',
     'hero.cta.cv': 'CV',
@@ -25,7 +25,8 @@ export const ui = {
 
     'about.title': 'Sobre mí',
     'about.body':
-      'Me gradué en Matemáticas e Informática en USC y me especialicé en sistemas de IA y desarrollo full-stack. Construyo productos de principio a fin: modelo, backend, y frontend. Trabajo en inglés, español, francés (DALF C1) y griego.',
+      'Soy ingeniero de software con un interés particular en la inteligencia artificial y una trayectoria multicultural. Tras graduarme de la Universidad de California del Sur (USC) en Matemáticas Puras, empecé a crear aplicaciones full-stack mientras enseñaba informática y matemáticas. Hablo español (DELE C1), francés (DALF C1), griego (B2) e inglés (nativo).',
+    'about.seeking': 'Buscando puestos presenciales en Bogotá como desarrollador de software.',
 
     'contact.title': 'Contacto',
     'contact.linkedin': 'LinkedIn',
@@ -72,6 +73,8 @@ export const ui = {
     'about.title': 'About',
     'about.body':
       'I studied mathematics and computer science at USC and specialized in AI systems and full-stack development. I build products end to end — model, backend, and frontend. I work in English, Spanish, French (DALF C1), and Greek.',
+
+    'about.seeking': '',
 
     'contact.title': 'Contact',
     'contact.linkedin': 'LinkedIn',
