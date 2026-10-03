@@ -31,7 +31,10 @@ export const ui = {
     'contact.title': 'Contacto',
     'contact.linkedin': 'LinkedIn',
     'contact.github': 'GitHub',
-    'contact.cv': 'Descargar CV',
+    'contact.email': 'Correo',
+    'contact.cv': 'Hoja de vida',
+    'contact.cv.es': 'Español',
+    'contact.cv.en': 'Inglés',
     'contact.cv.soon': 'Próximamente',
 
     'cs.back': 'Volver',
@@ -79,7 +82,10 @@ export const ui = {
     'contact.title': 'Contact',
     'contact.linkedin': 'LinkedIn',
     'contact.github': 'GitHub',
-    'contact.cv': 'Download Resume',
+    'contact.email': 'Email',
+    'contact.cv': 'Resume',
+    'contact.cv.es': 'Spanish',
+    'contact.cv.en': 'English',
     'contact.cv.soon': 'Coming soon',
 
     'cs.back': 'Back',

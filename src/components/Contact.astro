@@ -11,40 +11,113 @@ const cvAvailable = existsSync('public/cv-es.pdf') && existsSync('public/cv-en.p
 const linkedinAvailable = false;
 const linkedinUrl = 'https://www.linkedin.com/in/USERNAME';
 const soon = t('contact.cv.soon');
+
+// The address never appears in the HTML: reversed + base64, rebuilt by the script below.
+const emailEncoded = 'bW9jLmxpYW1nQHVvbmFmZXRza2Nhag==';
+
+const intro = '';
+const showMarker = import.meta.env.DEV;
 ---
 
 <section class="container pagina">
   <h1 class="titulo-pagina">{t('contact.title')}</h1>
 
-  <div class="enlaces">
-    <a href="https://github.com/huellasenarena" target="_blank" rel="noopener">{t('contact.github')}</a>
+  {intro ? (
+    <p class="texto intro">{intro}</p>
+  ) : showMarker && (
+    <p class="texto intro">[lo escribe Jack: una o dos frases antes de la lista — qué tipo de mensaje te gustaría recibir]</p>
+  )}
 
-    {linkedinAvailable ? (
-      <a href={linkedinUrl} target="_blank" rel="noopener">{t('contact.linkedin')}</a>
-    ) : (
-      <span class="pronto">{t('contact.linkedin')} · {soon}</span>
-    )}
+  <dl class="contacto">
+    <dt>{t('contact.email')}</dt>
+    <dd><a class="correo" data-e={emailEncoded}>…</a></dd>
 
-    {cvAvailable ? (
-      <>
-        <a href="/cv-es.pdf" download>{t('contact.cv')} (ES)</a>
-        <a href="/cv-en.pdf" download>{t('contact.cv')} (EN)</a>
-      </>
-    ) : (
-      <span class="pronto">CV · {soon}</span>
-    )}
-  </div>
+    <dt>{t('contact.github')}</dt>
+    <dd><a href="https://github.com/huellasenarena" target="_blank" rel="noopener">github.com/huellasenarena</a></dd>
+
+    <dt>{t('contact.linkedin')}</dt>
+    <dd>
+      {linkedinAvailable ? (
+        <a href={linkedinUrl} target="_blank" rel="noopener">{linkedinUrl.replace('https://www.', '')}</a>
+      ) : (
+        <span class="pronto">{soon}</span>
+      )}
+    </dd>
+
+    <dt>{t('contact.cv')}</dt>
+    <dd>
+      {cvAvailable ? (
+        <>
+          <a href="/cv-es.pdf" target="_blank" rel="noopener">{t('contact.cv.es')}</a>
+          <span class="sep">·</span>
+          <a href="/cv-en.pdf" target="_blank" rel="noopener">{t('contact.cv.en')}</a>
+          <span class="formato">PDF</span>
+        </>
+      ) : (
+        <span class="pronto">{soon}</span>
+      )}
+    </dd>
+  </dl>
 </section>
 
+<script>
+  for (const a of document.querySelectorAll<HTMLAnchorElement>('a.correo')) {
+    const email = atob(a.dataset.e ?? '').split('').reverse().join('');
+    a.href = `mailto:${email}`;
+    a.textContent = email;
+  }
+</script>
+
 <style>
-  .enlaces {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 22px;
+  .intro {
+    margin: 0 0 32px;
+  }
+
+  .contacto {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    max-width: 560px;
+    margin: 0;
     font-size: var(--t-texto);
+  }
+
+  .contacto dt,
+  .contacto dd {
+    margin: 0;
+    padding: 10px 0;
+    border-top: 1px solid var(--linea-suave);
+  }
+
+  .contacto dt {
+    color: var(--gris);
+  }
+
+  .sep {
+    color: var(--gris-claro);
+    margin: 0 6px;
+  }
+
+  .formato {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--gris-claro);
+    margin-left: 10px;
   }
 
   .pronto {
     color: var(--gris-claro);
+  }
+
+  @media (max-width: 480px) {
+    .contacto {
+      grid-template-columns: 1fr;
+    }
+    .contacto dd {
+      border-top: none;
+      padding-top: 0;
+    }
+    .contacto dt {
+      padding-bottom: 2px;
+    }
   }
 </style>

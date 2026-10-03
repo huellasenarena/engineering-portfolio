@@ -47,7 +47,7 @@ src/
 │   ├── ProjectCard.astro# list item: title link (case study / live site) + one line + stack in mono
 │   ├── CaseStudy.astro  # full case-study renderer (used by the dedicated pages)
 │   ├── About.astro      # short bio + languages (list with thin lines)
-│   └── Contact.astro    # LinkedIn / GitHub / CV links (some disabled placeholders)
+│   └── Contact.astro    # list with thin lines: Correo (obfuscated) / GitHub / LinkedIn / Hoja de vida (ES · EN)
 └── pages/
     ├── index.astro              # ES home (Hero only)        ↔ en/index.astro
     ├── proyectos/index.astro    # ES projects list            ↔ en/projects/index.astro
@@ -92,7 +92,7 @@ Case studies now hold **Jack's own text** (Oct 2026): his sections (Motivación 
 
 ## Design & content rules (important constraints)
 
-- **No email on the site** (privacy). Contact is via GitHub (+ LinkedIn/CV when ready). If a contact form is ever added, route it through a backend relay, never expose the address.
+- **Email is never in plain text.** Contacto shows it, but the HTML only holds it reversed + base64 (`emailEncoded` in `Contact.astro`); a small script rebuilds the `mailto:` in the browser. Don't write the address anywhere else in the repo or the HTML. If a contact form is ever added, route it through a backend relay.
 - **LinkedIn** is a disabled "Próximamente" placeholder — profile is dormant, reactivating in a few weeks. To enable: in `Contact.astro` set `linkedinAvailable = true` and put the real URL in `linkedinUrl`.
 - **CV (ES + EN)**: the source is two Google Docs ("Hoja de vida — Jack Stefanou (ES)" / "Resume — Jack Stefanou (EN)"), shared as "anyone with the link can view". `.github/workflows/actualizar-cv.yml` exports them daily (6:00 Bogotá, or by hand from Actions) to `public/cv-es.pdf` / `cv-en.pdf`, commits only if the text changed, then triggers `deploy.yml` (a bot push doesn't trigger it by itself). Doc IDs are repo variables `CV_ES_ID` / `CV_EN_ID`. `Contact.astro` shows the links only when both PDFs exist; otherwise "Próximamente". A last step re-enables the workflow via the API on every run, so GitHub's 60-day inactivity shutoff never kicks in. To edit the CV, edit the Google Doc, not the PDF.
 - **Do NOT highlight teaching** (Inspirit AI) — Jack is positioned as a builder, not an educator. Teaching can live on the CV, not the site.
@@ -161,6 +161,7 @@ There were **two hosted zones** for the domain in Route 53. The A records were a
   - Vocab: the result after the strategy change.
   - Vocab: "gratis" vs BYOK.
   - (About) what he's looking for is now one line; may refine.
+  - (Contacto) one or two lines before the list (`intro` in `Contact.astro`).
 - [ ] Enable **LinkedIn** when the profile is reactivated.
 - [ ] Run "Actualizar CV" once by hand after the first push.
 - [ ] Decide whether to make the `europresse-reader` repo public (currently no code link on its case study).
