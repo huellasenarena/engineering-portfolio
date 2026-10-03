@@ -94,7 +94,7 @@ Case studies now hold **Jack's own text** (Oct 2026): his sections (Motivación 
 
 - **No email on the site** (privacy). Contact is via GitHub (+ LinkedIn/CV when ready). If a contact form is ever added, route it through a backend relay, never expose the address.
 - **LinkedIn** is a disabled "Próximamente" placeholder — profile is dormant, reactivating in a few weeks. To enable: in `Contact.astro` set `linkedinAvailable = true` and put the real URL in `linkedinUrl`.
-- **CV (ES + EN)** are disabled "Próximamente" placeholders. To enable: drop `cv-es.pdf` / `cv-en.pdf` in `public/` and set `cvAvailable = true` in `Contact.astro`.
+- **CV (ES + EN)**: the source is two Google Docs ("Hoja de vida — Jack Stefanou (ES)" / "Resume — Jack Stefanou (EN)"), shared as "anyone with the link can view". `.github/workflows/actualizar-cv.yml` exports them daily (6:00 Bogotá, or by hand from Actions) to `public/cv-es.pdf` / `cv-en.pdf`, commits only if the text changed, then triggers `deploy.yml` (a bot push doesn't trigger it by itself). Doc IDs are repo variables `CV_ES_ID` / `CV_EN_ID`. `Contact.astro` shows the links only when both PDFs exist; otherwise "Próximamente". A last step re-enables the workflow via the API on every run, so GitHub's 60-day inactivity shutoff never kicks in. To edit the CV, edit the Google Doc, not the PDF.
 - **Do NOT highlight teaching** (Inspirit AI) — Jack is positioned as a builder, not an educator. Teaching can live on the CV, not the site.
 - **No university branding in the hero.** USC appears once in the About body, not as a badge.
 - **No headshot/selfie.** Personality comes from his B&W photography (he's a photographer).
@@ -162,7 +162,7 @@ There were **two hosted zones** for the domain in Route 53. The A records were a
   - Vocab: "gratis" vs BYOK.
   - (About) what he's looking for is now one line; may refine.
 - [ ] Enable **LinkedIn** when the profile is reactivated.
-- [ ] Add **CV** PDFs (ES + EN) and flip `cvAvailable`.
+- [ ] Run "Actualizar CV" once by hand after the first push.
 - [ ] Decide whether to make the `europresse-reader` repo public (currently no code link on its case study).
 - [ ] Optional: delete the duplicate Route 53 hosted zone.
 ```

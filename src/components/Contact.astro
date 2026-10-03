@@ -1,10 +1,12 @@
 ---
+import { existsSync } from 'node:fs';
 import { getLangFromUrl, useTranslations } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const cvAvailable = false; // flip to true when CVs are ready
+// The PDFs come from Google Docs via .github/workflows/actualizar-cv.yml
+const cvAvailable = existsSync('public/cv-es.pdf') && existsSync('public/cv-en.pdf');
 // LinkedIn profile is dormant — set to your URL and flip to true to enable
 const linkedinAvailable = false;
 const linkedinUrl = 'https://www.linkedin.com/in/USERNAME';

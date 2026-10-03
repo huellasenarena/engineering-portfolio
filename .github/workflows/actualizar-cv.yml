@@ -1,0 +1,76 @@
+# Descarga cada día los CV (ES y EN) desde Google Docs como PDF
+# y los guarda en public/ como cv-es.pdf y cv-en.pdf.
+# Solo hace commit si el TEXTO cambió (los PDF de Google cambian
+# de bytes en cada descarga, aunque el contenido sea el mismo).
+# Un push hecho con GITHUB_TOKEN no dispara otros workflows,
+# así que al final lanza el deploy a mano.
+
+name: Actualizar CV
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # cada día a las 6:00, hora de Bogotá
+  workflow_dispatch:         # botón para correrlo a mano
+
+permissions:
+  contents: write
+  actions: write             # para lanzar deploy.yml
+
+jobs:
+  cv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar pdftotext
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Descargar y comparar
+        env:
+          CV_ES_ID: ${{ vars.CV_ES_ID }}
+          CV_EN_ID: ${{ vars.CV_EN_ID }}
+        run: |
+          set -euo pipefail
+          for pair in "es:$CV_ES_ID" "en:$CV_EN_ID"; do
+            lang="${pair%%:*}"; id="${pair#*:}"
+            dest="public/cv-$lang.pdf"
+            curl -fsSL "https://docs.google.com/document/d/$id/export?format=pdf" -o "nuevo-$lang.pdf"
+
+            # Si el documento no es público, Google devuelve una página HTML
+            if [ "$(head -c 4 "nuevo-$lang.pdf")" != "%PDF" ]; then
+              echo "::error::cv-$lang no es un PDF. ¿El Google Doc está compartido con 'cualquier persona con el enlace'?"
+              exit 1
+            fi
+
+            if [ -f "$dest" ] && \
+               [ "$(pdftotext "nuevo-$lang.pdf" -)" = "$(pdftotext "$dest" -)" ]; then
+              echo "cv-$lang sin cambios"
+              rm "nuevo-$lang.pdf"
+            else
+              echo "cv-$lang actualizado"
+              mv "nuevo-$lang.pdf" "$dest"
+            fi
+          done
+
+      - name: Guardar en el repo y publicar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add public/cv-es.pdf public/cv-en.pdf
+          if git diff --staged --quiet; then
+            echo "Nada que publicar"
+          else
+            git commit -m "Actualizar CV"
+            git push
+            gh workflow run deploy.yml --ref main
+          fi
+
+      # GitHub desactiva los workflows con schedule tras 60 días sin actividad
+      # en el repo. Volver a "activarlo" por la API reinicia ese contador.
+      - name: Mantener el workflow activo
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/actualizar-cv.yml/enable"
