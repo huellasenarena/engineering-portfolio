@@ -17,7 +17,6 @@ const showMarker = import.meta.env.DEV;
 const captions = heroPhotos.map(({ file, caption }) =>
   caption[lang] || (showMarker ? `[pie de foto: ${file} — lo escribe Jack]` : '')
 );
-const hasCaptions = captions.some(Boolean);
 ---
 
 <section class="hero container" id="hero">
@@ -35,13 +34,13 @@ const hasCaptions = captions.some(Boolean);
         />
       ))}
     </div>
-    {hasCaptions && (
-      <div class="pies">
-        {captions.map((c, i) => (
-          <figcaption class:list={['pie', { oculta: i !== 0 }]}>{c}</figcaption>
-        ))}
-      </div>
-    )}
+    <div class="pies">
+      {captions.map((c, i) => (
+        <figcaption class:list={['pie', { oculta: i !== 0 }]}>
+          {c && <>{c}<span class="sep">·</span></>}<span class="credito">{t('hero.credit')}</span>
+        </figcaption>
+      ))}
+    </div>
   </figure>
 </section>
 
@@ -98,6 +97,16 @@ const hasCaptions = captions.some(Boolean);
     font-style: italic;
     color: var(--gris);
     transition: opacity 1.2s ease;
+  }
+
+  .sep {
+    margin: 0 6px;
+    color: var(--gris-claro);
+  }
+
+  .credito {
+    font-style: normal;
+    color: var(--gris-claro);
   }
 
   .oculta {

@@ -10,6 +10,7 @@ export const ui = {
 
     'hero.tagline': 'Desarrollador full stack buscando ir de 1 a 0; utilizo software para eliminar lo que nos pesa.',
     'hero.sub': 'Especialista en IA',
+    'hero.credit': 'Foto: Jack Stefanou',
     'hero.cta.github': 'GitHub',
     'hero.cta.contact': 'Contacto',
     'hero.cta.cv': 'CV',
@@ -25,7 +26,7 @@ export const ui = {
 
     'about.title': 'Sobre mí',
     'about.body':
-      'Soy ingeniero de software con un interés particular en la inteligencia artificial y una trayectoria multicultural. Tras graduarme de la Universidad de California del Sur (USC) en Matemáticas Puras, empecé a crear aplicaciones full-stack mientras enseñaba informática y matemáticas. Hablo español (DELE C1), francés (DALF C1), griego (B2) e inglés (nativo).',
+      'Soy ingeniero de software con un interés particular en la inteligencia artificial y una trayectoria multicultural. Tras graduarme de la Universidad de California del Sur (USC) en Matemáticas Puras, empecé a crear aplicaciones full-stack mientras enseñaba informática y matemáticas. Hablo español (DELE C1), francés (DALF C1), griego (B2) e inglés (nativo). Hacer fotografías es un hobby.',
     'about.seeking': 'Buscando puestos presenciales en Bogotá como desarrollador de software.',
 
     'contact.title': 'Contacto',
@@ -60,6 +61,7 @@ export const ui = {
 
     'hero.tagline': 'I build, ship, and explain full-stack AI systems.',
     'hero.sub': 'Full-stack developer · AI specialist',
+    'hero.credit': 'Photo: Jack Stefanou',
     'hero.cta.github': 'GitHub',
     'hero.cta.contact': 'Contact',
     'hero.cta.cv': 'Resume',
