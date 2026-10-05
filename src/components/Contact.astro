@@ -7,9 +7,9 @@ const t = useTranslations(lang);
 
 // The PDFs come from Google Docs via .github/workflows/actualizar-cv.yml
 const cvAvailable = existsSync('public/cv-es.pdf') && existsSync('public/cv-en.pdf');
-// LinkedIn profile is dormant — set to your URL and flip to true to enable
-const linkedinAvailable = false;
-const linkedinUrl = 'https://www.linkedin.com/in/USERNAME';
+// LinkedIn profile URL; set linkedinAvailable = false to show "Próximamente" instead
+const linkedinAvailable = true;
+const linkedinUrl = 'https://www.linkedin.com/in/jack-stefanou';
 const soon = t('contact.cv.soon');
 
 // The address never appears in the HTML: reversed + base64, rebuilt by the script below.
