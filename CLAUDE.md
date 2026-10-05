@@ -161,9 +161,7 @@ There were **two hosted zones** for the domain in Route 53. The A records were a
   - Vocab: the result after the strategy change.
   - Vocab: "gratis" vs BYOK.
   - (About) what he's looking for is now one line; may refine.
-  - (Contacto) one or two lines before the list (`intro` in `Contact.astro`).
 - [ ] Enable **LinkedIn** when the profile is reactivated.
-- [ ] Run "Actualizar CV" once by hand after the first push.
 - [ ] Decide whether to make the `europresse-reader` repo public (currently no code link on its case study).
 - [ ] Optional: delete the duplicate Route 53 hosted zone.
 ```

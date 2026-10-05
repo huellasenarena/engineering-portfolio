@@ -14,19 +14,10 @@ const soon = t('contact.cv.soon');
 
 // The address never appears in the HTML: reversed + base64, rebuilt by the script below.
 const emailEncoded = 'bW9jLmxpYW1nQHVvbmFmZXRza2Nhag==';
-
-const intro = '';
-const showMarker = import.meta.env.DEV;
 ---
 
 <section class="container pagina">
   <h1 class="titulo-pagina">{t('contact.title')}</h1>
-
-  {intro ? (
-    <p class="texto intro">{intro}</p>
-  ) : showMarker && (
-    <p class="texto intro">[lo escribe Jack: una o dos frases antes de la lista — qué tipo de mensaje te gustaría recibir]</p>
-  )}
 
   <dl class="contacto">
     <dt>{t('contact.email')}</dt>
@@ -69,10 +60,6 @@ const showMarker = import.meta.env.DEV;
 </script>
 
 <style>
-  .intro {
-    margin: 0 0 32px;
-  }
-
   .contacto {
     display: grid;
     grid-template-columns: 9rem 1fr;
